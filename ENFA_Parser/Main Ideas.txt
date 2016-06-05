@@ -1,0 +1,45 @@
+﻿Graph
+Existing state has transitions which has transitions rules. if more transition rules are matched a split in the state-visitor path for each state.
+A state can be a negating state which terminates the state-visitor path
+A state can be an accepting state which is a match
+A state can be a transition state (not negating or accepting)
+A state can be a countup state (counter has unique id)
+A state can be a reset count state (for unique id)
+A state can be a group start (recording* or non recording)
+A state can be a group end
+A state* can be a placeholder for a recorded group
+A state can be a lookahead start
+A state can be a lookahead end
+A state can be a lookbehind start
+A state can be a lookbehind end
+A state# can be a scope start (pushed scope on scope stack)
+A state# can be a scope end (pops scope off scope stack)
+A state# can be a context switch to another grammar
+(* Regex only, # Language only)
+
+A state-visitor path (entire path as graph structured stack?)
+- records the newest accepting state it visits (Graph structured stack?)
+- records state counter
+- a lookahead makes path continue without advancing matching counter
+- a lookbehind makes reverse match on existing chars or states
+
+A state transition can contain
+- a counter max or min (* has min 0 and max -1, + has min 1 and max -1, ? has min 0 and max 1, {x,y} has min x and max y with x omitted has min 0 with y omitted has max -1, {x} has max = x and min = x)
+- a char number range*
+- a char type word, digit etc*
+- a boundry such as word boundry*
+- a scope identifier#
+- a non-terminal#
+- a terminal# matched on regex level
+
+Translations
+- Parsed in reverse order as information of what to do with data is typically recorded after the group
+- alteration translates into two state transitions
+- matched identifier can be inserted as as scoped identifier and when exiting scope is removed (linked to scope token)#
+- negation is a state/group ending in negating state
+
+
+Extra
+identifiers when inserted can be inserted with type ?
+functions are treated as type ?
+type as a context?
