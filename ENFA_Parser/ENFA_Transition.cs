@@ -19,5 +19,6 @@ namespace ENFA_Parser
         //- a scope identifier#
         //- a non-terminal#
         //- a terminal# matched on regex level
+        // contextTransition
     }
 }

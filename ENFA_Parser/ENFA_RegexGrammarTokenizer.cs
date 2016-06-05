@@ -9,11 +9,11 @@ namespace ENFA_Parser
 {
     public class ENFA_RegexGrammarTokenizer : ENFA_GrammarTokenizer
     {
-
+        private ENFA_Step _lastStep;
 
         public override IEnumerable<ENFA_Step> Tokenize(StreamReader reader)
         {
-            if(reader.EndOfStream)
+            if(reader.EndOfStream || (_lastStep != null && _lastStep.State.StateName.Equals("ENFA_ContextSwitch")
             {
                 yield break;
             }
