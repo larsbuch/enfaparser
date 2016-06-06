@@ -19,4 +19,25 @@ namespace ENFA_Parser
         Regex,
         Language
     }
+
+    public enum TransitionType
+    {
+        Literal,
+        NegateLiteral,
+        Letter,
+        NegateLetter,
+        Digit,
+        NegateDigit,
+        Whitespace,
+        NegateWhitespace,
+        Word,
+        NegateWord,
+        NewLine,
+        NegateNewLine,
+        WordBoundary,
+        NegateWordBoundary,
+        StartOfLine,
+        EndOfLine,
+        ExitState
+    }
 }

@@ -40,10 +40,10 @@ namespace ENFA_Parser
         public bool BuildENFA(Stream stream)
         {
             AddStream(stream);
-            foreach(var data in GrammarTokenizer.Tokenize(Reader) )
-            {
+            //foreach(var data in GrammarTokenizer.Tokenize(Reader) )
+            //{
 
-            }
+            //}
             return true;
         }
 

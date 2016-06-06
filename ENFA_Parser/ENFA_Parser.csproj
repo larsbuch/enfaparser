@@ -46,22 +46,24 @@
     <Compile Include="ENFA_ContextSwitch.cs" />
     <Compile Include="ENFA_Controller.cs" />
     <Compile Include="ENFA_CountUp.cs" />
+    <Compile Include="ENFA_Exception.cs" />
     <Compile Include="ENFA_GrammarTokenizer.cs" />
     <Compile Include="ENFA_GroupEnd.cs" />
+    <Compile Include="ENFA_GroupingStart.cs" />
     <Compile Include="ENFA_GroupStart.cs" />
     <Compile Include="ENFA_LookaheadEnd.cs" />
     <Compile Include="ENFA_LookaheadStart.cs" />
     <Compile Include="ENFA_LookbehindEnd.cs" />
     <Compile Include="ENFA_LookbehindStart.cs" />
     <Compile Include="ENFA_PlaceHolder.cs" />
-    <Compile Include="ENFA_RegexGrammarTokenizer.cs" />
+    <Compile Include="ENFA_Regex_GrammarTokenizer.cs" />
     <Compile Include="ENFA_ResetCount.cs" />
     <Compile Include="ENFA_ScopeEnd.cs" />
     <Compile Include="ENFA_ScopeStart.cs" />
     <Compile Include="ENFA_StartingState.cs" />
     <Compile Include="ENFA_State.cs" />
     <Compile Include="ENFA_Step.cs" />
-    <Compile Include="ENFA_Transition.cs" />
+    <Compile Include="ENFA_Regex_Transition.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -8,16 +8,16 @@ namespace ENFA_Parser
 {
     public class ENFA_Step
     {
-        private ENFA_Transition _transition;
+        private ENFA_Regex_Transition _transition;
         private ENFA_Base _state;
 
-        public ENFA_Step(ENFA_Transition transition, ENFA_Base state)
+        public ENFA_Step(ENFA_Regex_Transition transition, ENFA_Base state)
         {
             _transition = transition;
             _state = state;
         }
 
-        public ENFA_Transition Transition
+        public ENFA_Regex_Transition Transition
         {
             get
             {

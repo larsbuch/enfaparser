@@ -13,6 +13,6 @@ namespace ENFA_Parser
         {
         }
 
-        public abstract IEnumerable<ENFA_Step> Tokenize(StreamReader streamReader);
+        public abstract bool Tokenize(ENFA_StartingState startingState, string nonTernimalName, StreamReader reader);
     }
 }

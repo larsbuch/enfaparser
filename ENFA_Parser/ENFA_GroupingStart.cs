@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace ENFA_Parser
 {
-    public class ENFA_StartingState: ENFA_GroupingStart
+    public abstract class ENFA_GroupingStart:ENFA_Base
     {
-        public ENFA_StartingState(StateType stateType):base(stateType)
-        {
-
-        }
+        public ENFA_GroupingStart(StateType stateType):base(stateType)
+        { }
     }
 }

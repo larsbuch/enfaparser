@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ENFA_Parser
 {
-    public class ENFA_GroupStart: ENFA_Base
+    public class ENFA_GroupStart: ENFA_GroupingStart
     {
         //A state can be a group start (recording* or non recording)
         public ENFA_GroupStart(StateType stateType) : base(stateType)
