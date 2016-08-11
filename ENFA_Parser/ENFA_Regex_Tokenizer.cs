@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ENFA_Parser
 {
-    public class ENFA_Regex_GrammarTokenizer : ENFA_GrammarTokenizer
+    public class ENFA_Regex_Tokenizer : ENFA_Tokenizer
     {
 
         public override bool Tokenize(ENFA_StartingState startingState, string nonTernimalName, StreamReader reader)
@@ -16,8 +16,10 @@ namespace ENFA_Parser
             bool escaped = false;
             bool error = false;
             bool exit = false;
-            Stack<ENFA_GroupingStart> _groupingStart = new Stack<ENFA_GroupingStart>();
-            _groupingStart.Push(startingState);
+            Stack<ENFA_Base> _parentStack = new Stack<ENFA_Base>();
+            _parentStack.Push(startingState);
+            ENFA_Base lastState = startingState;
+            ENFA_Regex_Transition nextTransition;
             while (nextChar != null || exit)
             {
                 if (!escaped)
@@ -49,6 +51,9 @@ namespace ENFA_Parser
                     switch (nextChar)
                     {
                         case Constants.DoubleQuote:
+                            nextTransition = new ENFA_Regex_Transition(TransitionType.Literal, new ENFA_State(nextChar.Value, StateType.Transition));
+                            nextTransition.AddLiteral(Constants.DoubleQuote);
+                            lastState.AddTransition(nextTransition);
                             break;
                     }
                 }

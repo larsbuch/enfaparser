@@ -9,6 +9,9 @@ namespace ENFA_Parser
     {
         private string _stateName;
 
+        public ENFA_State(char stateName, StateType stateType) : this(stateName.ToString(),stateType)
+        { }
+
         public ENFA_State(string stateName, StateType stateType):base(stateType)
         {
             _stateName = stateName;

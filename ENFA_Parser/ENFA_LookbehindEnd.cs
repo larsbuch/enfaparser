@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ENFA_Parser
 {
-    public class ENFA_LookbehindEnd: ENFA_Base
+    public class ENFA_LookbehindEnd: ENFA_GroupingEnd
     {
         //A state can be a lookbehind end
         public ENFA_LookbehindEnd(StateType stateType) : base(stateType)

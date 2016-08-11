@@ -10,7 +10,7 @@ namespace ENFA_Parser
     public class ENFA_Controller
     {
         private ParserType _parserType;
-        private ENFA_GrammarTokenizer _grammarTokenizer;
+        private ENFA_Tokenizer _grammarTokenizer;
 
         public ENFA_Controller(ParserType parserType)
         {
@@ -25,7 +25,7 @@ namespace ENFA_Parser
             }
         }
 
-        public ENFA_GrammarTokenizer GrammarTokenizer
+        public ENFA_Tokenizer GrammarTokenizer
         {
             get
             {

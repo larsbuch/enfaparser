@@ -13,32 +13,38 @@ namespace ENFA_Parser.UnitTests
         [Theory, ENFAParserTestConvensions]
         public void SingleLetter()
         {
-            ENFA_Regex_GrammarTokenizer regex = new ENFA_Regex_GrammarTokenizer();
+            ENFA_Regex_Tokenizer regex = new ENFA_Regex_Tokenizer();
             string regexPattern = @"a";
-            //List<ENFA_Step> steps = regex.Tokenize(new ENFA_StartingState(StateType.Transition), "State", new StreamReader(regexPattern.ToStream()));
-
+            ENFA_StartingState startingState = new ENFA_StartingState(StateType.Transition);
+            Assert.True(regex.Tokenize(startingState, "State", new StreamReader(regexPattern.ToStream())));
         }
 
         [Theory, ENFAParserTestConvensions]
         public void SimpleAlteration()
         {
-            ENFA_Regex_GrammarTokenizer regex = new ENFA_Regex_GrammarTokenizer();
+            ENFA_Regex_Tokenizer regex = new ENFA_Regex_Tokenizer();
             string regexPattern = @"a|b";
+            ENFA_StartingState startingState = new ENFA_StartingState(StateType.Transition);
+            Assert.True(regex.Tokenize(startingState, "State", new StreamReader(regexPattern.ToStream())));
         }
 
         [Theory, ENFAParserTestConvensions]
         public void SimpleConcatination()
         {
-            ENFA_Regex_GrammarTokenizer regex = new ENFA_Regex_GrammarTokenizer();
+            ENFA_Regex_Tokenizer regex = new ENFA_Regex_Tokenizer();
             string regexPattern = @"ab";
+            ENFA_StartingState startingState = new ENFA_StartingState(StateType.Transition);
+            Assert.True(regex.Tokenize(startingState, "State", new StreamReader(regexPattern.ToStream())));
         }
 
-        [Theory, ENFAParserTestConvensions]
-        public void SimpleNegation()
-        {
-            ENFA_Regex_GrammarTokenizer regex = new ENFA_Regex_GrammarTokenizer();
-            string regexPattern = @"a/b";
-        }
+        //[Theory, ENFAParserTestConvensions]
+        //public void SimpleNegation()
+        //{
+        //    ENFA_Regex_GrammarTokenizer regex = new ENFA_Regex_GrammarTokenizer();
+        //    string regexPattern = @"[^a]";
+        //    ENFA_StartingState startingState = new ENFA_StartingState(StateType.Transition);
+        //    Assert.True(regex.Tokenize(startingState, "State", new StreamReader(regexPattern.ToStream())));
+        //}
 
     }
 }

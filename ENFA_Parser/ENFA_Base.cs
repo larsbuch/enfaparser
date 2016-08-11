@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,9 +14,12 @@ namespace ENFA_Parser
         //A state can be a transition state(not negating or accepting)
 
         private StateType _stateType;
+        private List<ENFA_Transition> _nextTransitions;
+
         public ENFA_Base(StateType stateType)
         {
             _stateType = stateType;
+            _nextTransitions = new List<ENFA_Transition>();
         }
 
         public StateType StateType
@@ -31,6 +35,19 @@ namespace ENFA_Parser
             get
             {
                 return GetType().Name;
+            }
+        }
+
+        public void AddTransition(ENFA_Transition nextTransition)
+        {
+            _nextTransitions.Add(nextTransition);
+        }
+
+        public List<ENFA_Transition> GetTransitions
+        {
+            get
+            {
+                return _nextTransitions;
             }
         }
     }

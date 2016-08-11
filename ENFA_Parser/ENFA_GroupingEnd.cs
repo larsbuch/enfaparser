@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace ENFA_Parser
 {
-    public class ENFA_GroupEnd: ENFA_GroupingEnd
+    public abstract class ENFA_GroupingEnd:ENFA_Base
     {
-        public ENFA_GroupEnd(StateType stateType) :base(stateType)
+        public ENFA_GroupingEnd(StateType stateType):base(stateType)
         { }
-
-        //A state can be a group end
     }
 }

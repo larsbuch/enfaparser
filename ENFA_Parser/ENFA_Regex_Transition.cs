@@ -7,32 +7,37 @@ using System.Threading.Tasks;
 
 namespace ENFA_Parser
 {
-    public class ENFA_Regex_Transition
+    public class ENFA_Regex_Transition:ENFA_Transition
     {
         //        A state transition can contain
         //- a counter max or min(* has min 0 and max -1, + has min 1 and max -1, ? has min 0 and max 1, { x,y}
         //        has min x and max y with x omitted has min 0 with y omitted has max -1, {x
         //    }
         //    has max = x and min = x)
-        //- a char number range*
-        //- a char type word, digit etc*
-        //- a boundry such as word boundry*
-        //- a scope identifier#
-        //- a non-terminal#
-        //- a terminal# matched on regex level
+        //Done: - a char number range* (tokenizer adds literals for all)
+        //Done: - a char type word, digit etc*
+        //Done: - a boundry such as word boundry*
         // contextTransition
 
         private TransitionType _transitionType;
         private List<char> _literal;
-        public ENFA_Regex_Transition(TransitionType transitionType)
+        private ENFA_Base _nextState;
+
+        public ENFA_Regex_Transition(TransitionType transitionType, ENFA_Base nextState)
         {
             _transitionType = transitionType;
             _literal = new List<char>();
+            _nextState = nextState;
         }
 
         public void AddLiteral(char literal)
         {
             _literal.Add(literal);
+        }
+
+        public ENFA_Base Transition()
+        {
+            return _nextState;
         }
 
         public bool TransitionAllowed(char? lastChar, char nextChar, out bool consumesChar)
@@ -103,7 +108,7 @@ namespace ENFA_Parser
                     }
                 case TransitionType.ExitState:
                     consumesChar = true;
-                    throw new NotImplementedException();
+                    return true;
                 default:
                     throw new ENFA_Exception("Transition Type has not been defined");
             }

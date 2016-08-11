@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ENFA_Parser
 {
-    public abstract class ENFA_GrammarTokenizer
+    public abstract class ENFA_Tokenizer
     {
-        public ENFA_GrammarTokenizer()
+        public ENFA_Tokenizer()
         {
         }
 
