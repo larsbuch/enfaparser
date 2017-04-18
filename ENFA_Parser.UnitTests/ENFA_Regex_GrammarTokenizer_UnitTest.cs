@@ -15,8 +15,7 @@ namespace ENFA_Parser.UnitTests
         {
             ENFA_Regex_Tokenizer regex = new ENFA_Regex_Tokenizer();
             string regexPattern = @"a";
-            ENFA_StartingState startingState = new ENFA_StartingState(StateType.Transition);
-            Assert.True(regex.Tokenize(startingState, "State", new StreamReader(regexPattern.ToStream())));
+            Assert.True(regex.Tokenize("State", new StreamReader(regexPattern.ToStream())));
         }
 
         [Theory, ENFAParserTestConvensions]
@@ -24,8 +23,7 @@ namespace ENFA_Parser.UnitTests
         {
             ENFA_Regex_Tokenizer regex = new ENFA_Regex_Tokenizer();
             string regexPattern = @"a|b";
-            ENFA_StartingState startingState = new ENFA_StartingState(StateType.Transition);
-            Assert.True(regex.Tokenize(startingState, "State", new StreamReader(regexPattern.ToStream())));
+            Assert.True(regex.Tokenize("State", new StreamReader(regexPattern.ToStream())));
         }
 
         [Theory, ENFAParserTestConvensions]
@@ -33,8 +31,7 @@ namespace ENFA_Parser.UnitTests
         {
             ENFA_Regex_Tokenizer regex = new ENFA_Regex_Tokenizer();
             string regexPattern = @"ab";
-            ENFA_StartingState startingState = new ENFA_StartingState(StateType.Transition);
-            Assert.True(regex.Tokenize(startingState, "State", new StreamReader(regexPattern.ToStream())));
+            Assert.True(regex.Tokenize("State", new StreamReader(regexPattern.ToStream())));
         }
 
         //[Theory, ENFAParserTestConvensions]

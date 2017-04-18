@@ -39,6 +39,7 @@ namespace ENFA_Parser
         public const char QuestionMark = (char)0x003F;
         public const char EqualsSign = (char)0x003D;
         public const char ExclamationMark = (char)0x0021;
+        public const char Escape = (char)0x001B;
 
         /* Renamed for regex */
         public const char ExitContext = DoubleQuote;

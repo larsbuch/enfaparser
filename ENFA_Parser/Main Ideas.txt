@@ -43,3 +43,14 @@ Extra
 identifiers when inserted can be inserted with type ?
 functions are treated as type ?
 type as a context?
+
+ENFA Parser Derived programs
+- Easy Regex (predefined regexes)
+- JSON language
+- JSON Schema creator
+- ENFA Editor
+
+FTC
+- Combining regexes & colapsing multible paths
+	- making abab|abbb equal to ab(?:ab|bb)
+	- Accepting state references ENFA Pattern where as start state can be combined form several ENFA Patterns
