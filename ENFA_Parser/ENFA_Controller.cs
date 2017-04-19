@@ -15,6 +15,15 @@ namespace ENFA_Parser
         public ENFA_Controller(ParserType parserType)
         {
             _parserType = parserType;
+            switch(_parserType)
+            {
+                case ParserType.Regex:
+                    _grammarTokenizer = new ENFA_Regex_Tokenizer(this);
+                    break;
+                case ParserType.Language:
+                    _grammarTokenizer = new ENFA_Language_Tokenizer(this);
+                    break;
+            }
         }
 
         public ParserType ParserType

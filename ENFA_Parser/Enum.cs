@@ -11,7 +11,8 @@ namespace ENFA_Parser
         Negating,
         Accepting,
         Transition,
-        Error
+        Error,
+        NotApplicable
     }
 
     public enum ParserType
@@ -38,6 +39,9 @@ namespace ENFA_Parser
         NegateWordBoundary,
         StartOfLine,
         EndOfLine,
-        ExitState
+        ExitState,
+        BackReference,
+        GroupingStart,
+        GroupingEnd
     }
 }

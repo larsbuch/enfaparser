@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace ENFA_Parser
 {
-    public class ENFA_Regex_Tokenizer : ENFA_Tokenizer
+    public class ENFA_Language_Tokenizer : ENFA_Tokenizer
     {
-        public ENFA_Regex_Tokenizer(ENFA_Controller controller):base(controller)
+        public ENFA_Language_Tokenizer(ENFA_Controller controller):base(controller)
         { }
 
         public override bool Tokenize(string ternimalName, StreamReader reader)
         {
-            char? nextChar = nextCharInStream(reader);
+            char? nextChar = NextCharInStream(reader);
             bool escaped = false;
             bool error = false;
             bool exit = false;
-            ENFA_Base _parentStart = new ENFA_PatternStart(ternimalName,StateType.NotApplicable);
-            ENFA_Base _parentEnd = new ENFA_PatternEnd(_parentStart as ENFA_PatternStart, StateType.NotApplicable);
+            ENFA_GroupingStart _parentStart = new ENFA_PatternStart(ternimalName);
+            ENFA_GroupingEnd _parentEnd = new ENFA_PatternEnd(_parentStart as ENFA_PatternStart);
             ENFA_Base lastState = _parentStart;
             ENFA_Base nextState;
             ENFA_Regex_Transition nextTransition;
@@ -62,7 +62,7 @@ namespace ENFA_Parser
                             {
                                 nextState = new ENFA_State("Negate Character Group", StateType.Transition);
                                 /* Remove CircumfelxAccent */
-                                consumeNextChar(reader);
+                                ConsumeNextChar(reader);
                                 nextTransition = new ENFA_Regex_Transition(TransitionType.NegateLiteral, nextState);
                             }
                             else
@@ -75,8 +75,29 @@ namespace ENFA_Parser
                             lastState = nextState;
                             break;
                         case Constants.LeftParanthesis:
-                            // TODO
-                            throw new NotImplementedException();
+                            bool recording = true;
+                            string groupName = null;
+                            if ((char)reader.Peek() == Constants.QuestionMark)
+                            {
+                                /* Consume QuetionMark */
+                                ConsumeNextChar(reader);
+                                // check for group name
+                                if ((char)reader.Peek() == Constants.LessThanSign)
+                                {
+                                    groupName = GetGroupName(reader);
+                                }
+                                // check for non-recording group
+                                else if ((char)reader.Peek() == Constants.Colon)
+                                {
+                                    recording = false;
+                                }
+                            }
+                            _parentStart = new ENFA_GroupStart(_parentStart, recording, groupName);
+                            _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, _parentEnd);
+                            nextState = new ENFA_State("Group Start", StateType.NotApplicable);
+                            nextTransition = new ENFA_Regex_Transition(TransitionType.GroupingStart, nextState);
+                            lastState.AddTransition(nextTransition);
+                            lastState = nextState;
                             break;
                         case Constants.RightParanthesis:
                             // TODO
@@ -239,40 +260,38 @@ namespace ENFA_Parser
                             lastState = nextState;
                             break;
                         case '1':
-                            /* Back reference */
-                            throw new NotImplementedException();
-                            break;
                         case '2':
-                            /* Back reference */
-                            throw new NotImplementedException();
-                            break;
                         case '3':
-                            /* Back reference */
-                            throw new NotImplementedException();
-                            break;
                         case '4':
-                            /* Back reference */
-                            throw new NotImplementedException();
-                            break;
                         case '5':
-                            /* Back reference */
-                            throw new NotImplementedException();
-                            break;
                         case '6':
-                            /* Back reference */
-                            throw new NotImplementedException();
-                            break;
                         case '7':
-                            /* Back reference */
-                            throw new NotImplementedException();
-                            break;
                         case '8':
-                            /* Back reference */
-                            throw new NotImplementedException();
-                            break;
                         case '9':
                             /* Back reference */
-                            throw new NotImplementedException();
+                            int groupNumber = int.Parse(nextChar.Value.ToString());
+                            nextState = new ENFA_PlaceHolder(groupNumber);
+                            nextTransition = new ENFA_Regex_Transition(TransitionType.BackReference, nextState);
+                            lastState.AddTransition(nextTransition);
+                            lastState = nextState;
+                            break;
+                        case 'k':
+                            /* Named back reference like k<Bartho> */
+                            string groupName = null;
+                            if ((char)reader.Peek() == Constants.LessThanSign)
+                            {
+                                /* Consume LessThanSign */
+                                ConsumeNextChar(reader);
+                                groupName = GetGroupName(reader);
+                            }
+                            else
+                            {
+                                // TODO Error
+                            }
+                            nextState = new ENFA_PlaceHolder(groupName);
+                            nextTransition = new ENFA_Regex_Transition(TransitionType.BackReference, nextState);
+                            lastState.AddTransition(nextTransition);
+                            lastState = nextState;
                             break;
                         case Constants.DoubleQuote:
                         case Constants.LeftCurlyBracket:
@@ -302,7 +321,7 @@ namespace ENFA_Parser
                 }
                 if (!exit)
                 {
-                    nextChar = nextCharInStream(reader);
+                    nextChar = NextCharInStream(reader);
                 }
                 if(exit || !nextChar.HasValue)
                 {
@@ -312,17 +331,22 @@ namespace ENFA_Parser
             return error;
         }
 
+        private string GetGroupName(StreamReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
         private void AddCharacterGroup(ENFA_Regex_Transition nextTransition, StreamReader reader)
         {
             throw new NotImplementedException();
         }
 
-        private void consumeNextChar(StreamReader reader)
+        private void ConsumeNextChar(StreamReader reader)
         {
-            nextCharInStream(reader);
+            NextCharInStream(reader);
         }
 
-        private char? nextCharInStream(StreamReader reader)
+        private char? NextCharInStream(StreamReader reader)
         {
             if (reader.EndOfStream)
             {

@@ -13,25 +13,25 @@ namespace ENFA_Parser.UnitTests
         [Theory, ENFAParserTestConvensions]
         public void SingleLetter()
         {
-            ENFA_Regex_Tokenizer regex = new ENFA_Regex_Tokenizer();
+            ENFA_Regex_Tokenizer regex = new ENFA_Regex_Tokenizer(new ENFA_Controller(ParserType.Regex));
             string regexPattern = @"a";
-            Assert.True(regex.Tokenize("State", new StreamReader(regexPattern.ToStream())));
+            Assert.False(regex.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
         [Theory, ENFAParserTestConvensions]
         public void SimpleAlteration()
         {
-            ENFA_Regex_Tokenizer regex = new ENFA_Regex_Tokenizer();
+            ENFA_Regex_Tokenizer regex = new ENFA_Regex_Tokenizer(new ENFA_Controller(ParserType.Regex));
             string regexPattern = @"a|b";
-            Assert.True(regex.Tokenize("State", new StreamReader(regexPattern.ToStream())));
+            Assert.False(regex.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
         [Theory, ENFAParserTestConvensions]
         public void SimpleConcatination()
         {
-            ENFA_Regex_Tokenizer regex = new ENFA_Regex_Tokenizer();
+            ENFA_Regex_Tokenizer regex = new ENFA_Regex_Tokenizer(new ENFA_Controller(ParserType.Regex));
             string regexPattern = @"ab";
-            Assert.True(regex.Tokenize("State", new StreamReader(regexPattern.ToStream())));
+            Assert.False(regex.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
         //[Theory, ENFAParserTestConvensions]

@@ -8,7 +8,7 @@ namespace ENFA_Parser
 {
     public abstract class ENFA_GroupingEnd:ENFA_Base
     {
-        public ENFA_GroupingEnd(StateType stateType):base(stateType)
+        public ENFA_GroupingEnd():base(StateType.NotApplicable)
         { }
     }
 }
