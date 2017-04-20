@@ -9,12 +9,10 @@ namespace ENFA_Parser
     public class ENFA_GroupEnd: ENFA_GroupingEnd
     {
         private ENFA_GroupStart _groupStart;
-        private ENFA_GroupingEnd _parent;
 
-        public ENFA_GroupEnd(ENFA_GroupStart groupStart, ENFA_GroupingEnd parent) :base()
+        public ENFA_GroupEnd(ENFA_GroupStart groupStart, ENFA_GroupingEnd parent) :base(parent)
         {
             _groupStart = groupStart;
-            _parent = parent;
         }
 
         public ENFA_GroupStart GroupStart
@@ -24,15 +22,6 @@ namespace ENFA_Parser
                 return _groupStart;
             }
         }
-
-        public ENFA_GroupingEnd Parent
-        {
-            get
-            {
-                return _parent;
-            }
-        }
-
         //A state can be a group end
     }
 }

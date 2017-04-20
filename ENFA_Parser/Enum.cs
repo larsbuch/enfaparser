@@ -44,4 +44,11 @@ namespace ENFA_Parser
         GroupingStart,
         GroupingEnd
     }
+
+    public enum MatchingType
+    {
+        NotSet,
+        LazyMatching,
+        GreedyMatching
+    }
 }

@@ -10,7 +10,7 @@ namespace ENFA_Parser
     {
         private string _terminalName;
         //A state can be a pattern start (always recording)
-        public ENFA_PatternStart(string terminalName) : base()
+        public ENFA_PatternStart(string terminalName) : base(null)
         {
             _terminalName = terminalName;
         }

@@ -8,7 +8,19 @@ namespace ENFA_Parser
 {
     public abstract class ENFA_GroupingStart:ENFA_Base
     {
-        public ENFA_GroupingStart():base(StateType.NotApplicable)
-        { }
+        private ENFA_GroupingStart _parent;
+
+        public ENFA_GroupingStart(ENFA_GroupingStart parent) :base(StateType.NotApplicable)
+        {
+            _parent = parent;
+        }
+
+        public ENFA_GroupingStart Parent
+        {
+            get
+            {
+                return _parent;
+            }
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace ENFA_Parser
     {
         private ENFA_PatternStart _patternStart;
 
-        public ENFA_PatternEnd(ENFA_PatternStart patternStart) :base()
+        public ENFA_PatternEnd(ENFA_PatternStart patternStart) :base(null)
         {
             _patternStart = patternStart;
         }

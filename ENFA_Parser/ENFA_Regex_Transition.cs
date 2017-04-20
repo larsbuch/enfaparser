@@ -22,17 +22,62 @@ namespace ENFA_Parser
         private TransitionType _transitionType;
         private List<char> _literal;
         private ENFA_Base _nextState;
+        private int _minRepetitions;
+        private int _maxRepetitions;
+        private MatchingType _matchingType;
 
         public ENFA_Regex_Transition(TransitionType transitionType, ENFA_Base nextState)
         {
             _transitionType = transitionType;
             _literal = new List<char>();
             _nextState = nextState;
+            _minRepetitions = 1;
+            _maxRepetitions = 1;
+            _matchingType = MatchingType.NotSet;
+        }
+
+        public int MinRepetitions
+        {
+            get
+            {
+                return _minRepetitions;
+            }
+            set
+            {
+                _minRepetitions = value;
+            }
+        }
+
+        public int MaxRepetitions
+        {
+            get
+            {
+                return _maxRepetitions;
+            }
+            set
+            {
+                _maxRepetitions = value;
+            }
+        }
+
+        public MatchingType MatchingType
+        {
+            get
+            {
+                return _matchingType;
+            }
+            set
+            {
+                _matchingType = value;
+            }
         }
 
         public void AddLiteral(char literal)
         {
-            _literal.Add(literal);
+            if (!_literal.Contains(literal))
+            {
+                _literal.Add(literal);
+            }
         }
 
         public ENFA_Base Transition()

@@ -11,6 +11,7 @@ namespace ENFA_Parser
     {
         private ParserType _parserType;
         private ENFA_Tokenizer _grammarTokenizer;
+        private MatchingType _matchingType;
 
         public ENFA_Controller(ParserType parserType)
         {
@@ -23,6 +24,19 @@ namespace ENFA_Parser
                 case ParserType.Language:
                     _grammarTokenizer = new ENFA_Language_Tokenizer(this);
                     break;
+            }
+            _matchingType = MatchingType.LazyMatching;
+        }
+
+        public MatchingType DefaultMatchType
+        {
+            get
+            {
+                return _matchingType;
+            }
+            set
+            {
+                _matchingType = value;
             }
         }
 

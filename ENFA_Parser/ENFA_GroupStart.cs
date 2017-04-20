@@ -8,24 +8,13 @@ namespace ENFA_Parser
 {
     public class ENFA_GroupStart: ENFA_GroupingStart
     {
-        private ENFA_GroupingStart _parent;
         private bool _recording;
         private string _groupName;
 
-        //A state can be a group start (recording* or non recording)
-        public ENFA_GroupStart(ENFA_GroupingStart parent, bool recording, string groupName) : base()
+        public ENFA_GroupStart(bool recording, string groupName, ENFA_GroupingStart parent) : base(parent)
         {
-            _parent = parent;
             _recording = recording;
             _groupName = groupName;
-        }
-
-        public ENFA_GroupingStart Parent
-        {
-            get
-            {
-                return _parent;
-            }
         }
 
         public bool Recording
