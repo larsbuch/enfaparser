@@ -65,8 +65,6 @@
     <Compile Include="ENFA_ResetCount.cs" />
     <Compile Include="ENFA_ScopeEnd.cs" />
     <Compile Include="ENFA_ScopeStart.cs" />
-    <Compile Include="ENFA_EndingState.cs" />
-    <Compile Include="ENFA_StartingState.cs" />
     <Compile Include="ENFA_State.cs" />
     <Compile Include="ENFA_Step.cs" />
     <Compile Include="ENFA_Regex_Transition.cs" />

@@ -10,8 +10,10 @@ namespace ENFA_Parser
     {
         private ENFA_GroupingEnd _parent;
 
-        public ENFA_GroupingEnd(ENFA_GroupingEnd parent) :base(StateType.NotApplicable)
-        { }
+        public ENFA_GroupingEnd(ENFA_GroupingEnd parent):base(StateType.NotApplicable)
+        {
+            _parent = parent;
+        }
 
         public ENFA_GroupingEnd Parent
         {

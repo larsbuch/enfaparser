@@ -8,8 +8,20 @@ namespace ENFA_Parser
 {
     public class ENFA_LookaheadEnd: ENFA_GroupingEnd
     {
+        private ENFA_LookaheadStart _lookaheadStart;
+
         //A state can be a lookahead end
-        public ENFA_LookaheadEnd(StateType stateType) : base(stateType)
-        { }
+        public ENFA_LookaheadEnd(ENFA_LookaheadStart lookaheadStart, ENFA_GroupingEnd parent) : base(parent)
+        {
+            _lookaheadStart = lookaheadStart;
+        }
+
+        public ENFA_LookaheadStart LookaheadStart
+        {
+            get
+            {
+                return _lookaheadStart;
+            }
+        }
     }
 }

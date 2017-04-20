@@ -14,7 +14,7 @@ namespace ENFA_Parser
         //A state can be a transition state(not negating or accepting)
 
         private StateType _stateType;
-        private List<ENFA_Transition> _nextTransitions;
+        protected List<ENFA_Transition> _nextTransitions;
 
         public ENFA_Base(StateType stateType)
         {

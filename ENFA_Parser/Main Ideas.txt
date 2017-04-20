@@ -1,10 +1,9 @@
 ﻿Graph
+(* Regex only, # Language only)
 Existing state has transitions which has transitions rules. if more transition rules are matched a split in the state-visitor path for each state.
 A state can be a negating state which terminates the state-visitor path
 A state can be an accepting state which is a match
 A state can be a transition state (not negating or accepting)
-A state can be a countup state (counter has unique id)
-A state can be a reset count state (for unique id)
 A state can be a group start (recording* or non recording)
 A state can be a group end
 A state* can be a placeholder for a recorded group
@@ -15,7 +14,6 @@ A state can be a lookbehind end
 A state# can be a scope start (pushed scope on scope stack)
 A state# can be a scope end (pops scope off scope stack)
 A state# can be a context switch to another grammar
-(* Regex only, # Language only)
 
 A state-visitor path (entire path as graph structured stack?)
 - records the newest accepting state it visits (Graph structured stack?)
@@ -38,11 +36,13 @@ Translations
 - matched identifier can be inserted as as scoped identifier and when exiting scope is removed (linked to scope token)#
 - negation is a state/group ending in negating state
 
+Missing
+- lookbehind reversing: Lookbehind is done on the already matched string from the visitor object which makes the match faster to have in reverse and do on reverse matched string
 
 Extra
-identifiers when inserted can be inserted with type ?
-functions are treated as type ?
-type as a context?
+- identifiers when inserted can be inserted with type ?
+- functions are treated as type ?
+- type as a context?
 
 ENFA Parser Derived programs
 - Easy Regex (predefined regexes)

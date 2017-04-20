@@ -51,4 +51,10 @@ namespace ENFA_Parser
         LazyMatching,
         GreedyMatching
     }
+
+    public enum AssertionType
+    {
+        Positive,
+        Negative
+    }
 }
