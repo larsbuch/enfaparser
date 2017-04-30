@@ -24,31 +24,31 @@ namespace ENFA_Parser
             }
         }
 
-        public void Reverse()
-        {
-            foreach(ENFA_Regex_Transition transition in LookbehindStart.GetTransitions)
-            {
-                AddTransition(transition);
-                TraverseUntilLookbehindEndAndReplaceWithStart(transition);
-            }
-            LookbehindStart.ClearTransitions();
-        }
+        //public void Reverse()
+        //{
+        //    foreach(ENFA_Regex_Transition transition in LookbehindStart.GetTransitions)
+        //    {
+        //        AddTransition(transition);
+        //        TraverseUntilLookbehindEndAndReplaceWithStart(transition);
+        //    }
+        //    LookbehindStart.ClearTransitions();
+        //}
 
-        private void TraverseUntilLookbehindEndAndReplaceWithStart(ENFA_Regex_Transition transition)
-        {
-            ENFA_Base state = transition.Transition();
-            if(state is ENFA_LookbehindEnd)
-            {
-                /* replace state on transition */
-                transition.ReplaceState(LookbehindStart);
-            }
-            else
-            {
-                foreach (ENFA_Regex_Transition subTransition in state.GetTransitions)
-                {
-                    TraverseUntilLookbehindEndAndReplaceWithStart(transition);
-                }
-            }
-        }
+        //private void TraverseUntilLookbehindEndAndReplaceWithStart(ENFA_Regex_Transition transition)
+        //{
+        //    ENFA_Base state = transition.Transition();
+        //    if(state is ENFA_LookbehindEnd)
+        //    {
+        //        /* replace state on transition */
+        //        transition.ReplaceState(LookbehindStart);
+        //    }
+        //    else
+        //    {
+        //        foreach (ENFA_Regex_Transition subTransition in state.GetTransitions)
+        //        {
+        //            TraverseUntilLookbehindEndAndReplaceWithStart(transition);
+        //        }
+        //    }
+        //}
     }
 }

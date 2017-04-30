@@ -9,10 +9,13 @@ namespace ENFA_Parser
     public class ENFA_PatternEnd: ENFA_GroupingEnd
     {
         private ENFA_PatternStart _patternStart;
+        private string _terminalName;
 
-        public ENFA_PatternEnd(ENFA_PatternStart patternStart) :base(null)
+        //A state can be a pattern end
+        public ENFA_PatternEnd(ENFA_PatternStart patternStart, string terminalName) :base(null)
         {
             _patternStart = patternStart;
+            _terminalName = terminalName;
         }
 
         public ENFA_PatternStart PatternStart
@@ -22,6 +25,14 @@ namespace ENFA_Parser
                 return _patternStart;
             }
         }
-        //A state can be a pattern end
+
+        public string TerminalName
+        {
+            get
+            {
+                return _terminalName;
+            }
+        }
+
     }
 }

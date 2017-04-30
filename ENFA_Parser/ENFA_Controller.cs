@@ -12,9 +12,12 @@ namespace ENFA_Parser
         private ParserType _parserType;
         private ENFA_Tokenizer _grammarTokenizer;
         private MatchingType _matchingType;
+        private ENFA_PatternStart _patternStart;
+        private bool _defaultGroupingRecording;
 
         public ENFA_Controller(ParserType parserType)
         {
+            _patternStart = new ENFA_PatternStart();
             _parserType = parserType;
             switch(_parserType)
             {
@@ -48,6 +51,26 @@ namespace ENFA_Parser
             }
         }
 
+        public ENFA_PatternStart PatternStart
+        {
+            get
+            {
+                return _patternStart;
+            }
+        }
+
+        public bool DefaultGroupingRecording
+        {
+            get
+            {
+                return _defaultGroupingRecording;
+            }
+            set
+            {
+                _defaultGroupingRecording = value;
+            }
+        }
+
         public ENFA_Tokenizer GrammarTokenizer
         {
             get
@@ -58,16 +81,6 @@ namespace ENFA_Parser
             {
                 _grammarTokenizer = value;
             }
-        }
-
-        public bool BuildENFA(Stream stream)
-        {
-            AddStream(stream);
-            //foreach(var data in GrammarTokenizer.Tokenize(Reader) )
-            //{
-
-            //}
-            return true;
         }
 
         private StreamReader _streamReader;

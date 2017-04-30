@@ -18,9 +18,9 @@ namespace ENFA_Parser
             bool escaped = false;
             bool error = false;
             bool exit = false;
-            ENFA_PatternStart _patternStart = new ENFA_PatternStart(ternimalName);
+            ENFA_PatternStart _patternStart = new ENFA_PatternStart();
             ENFA_GroupingStart _parentStart = _patternStart;
-            ENFA_GroupingEnd _parentEnd = new ENFA_PatternEnd(_parentStart as ENFA_PatternStart);
+            ENFA_GroupingEnd _parentEnd = new ENFA_PatternEnd(_parentStart as ENFA_PatternStart, ternimalName);
             ENFA_Base lastState = _parentStart;
             ENFA_Base nextState;
             ENFA_Regex_Transition activeTransition = null;

@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace ENFA_Parser
 {
     [Serializable]
-    internal class ENFA_Exception : Exception
+    public class ENFA_Exception : Exception
     {
         public ENFA_Exception(string message
             , [System.Runtime.CompilerServices.CallerMemberName] string callerMemberName = ""

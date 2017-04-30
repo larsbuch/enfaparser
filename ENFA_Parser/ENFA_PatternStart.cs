@@ -8,19 +8,9 @@ namespace ENFA_Parser
 {
     public class ENFA_PatternStart: ENFA_GroupingStart
     {
-        private string _terminalName;
         //A state can be a pattern start (always recording)
-        public ENFA_PatternStart(string terminalName) : base(null)
+        public ENFA_PatternStart() : base(null)
         {
-            _terminalName = terminalName;
-        }
-
-        public string TerminalName
-        {
-            get
-            {
-                return _terminalName;
-            }
         }
     }
 }

@@ -47,6 +47,8 @@ namespace ENFA_Parser
         public const char AllButNewLine = FullStop;
         public const char StartOfLine = CircumflexAccent;
         public const char EndOfLine = DollarSign;
+        public const char GroupingEnd = RightParanthesis;
+        public const char GroupingStart = LeftParanthesis;
 
     }
 }

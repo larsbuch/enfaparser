@@ -9,22 +9,27 @@ namespace ENFA_Parser
 {
     public class ENFA_Regex_Tokenizer : ENFA_Tokenizer
     {
+        private List<char> _matchedCharInRegexBuild;
+        private string _currectTerminalName;
+
         public ENFA_Regex_Tokenizer(ENFA_Controller controller):base(controller)
         { }
 
-        public override bool Tokenize(string ternimalName, StreamReader reader)
+        public override bool Tokenize(string terminalName, StreamReader reader)
         {
+            _matchedCharInRegexBuild = new List<char>();
+            _currectTerminalName = terminalName;
             char? nextChar = NextCharInStream(reader);
             bool escaped = false;
-            bool error = false;
+            bool success = false; // Error until proven correct
             bool exit = false;
-            ENFA_PatternStart _patternStart = new ENFA_PatternStart(ternimalName);
-            ENFA_GroupingStart _parentStart = _patternStart;
-            ENFA_GroupingEnd _parentEnd = new ENFA_PatternEnd(_parentStart as ENFA_PatternStart);
+            ENFA_GroupingStart _parentStart = Controller.PatternStart;
+            ENFA_PatternEnd _patternEnd = new ENFA_PatternEnd(_parentStart as ENFA_PatternStart, terminalName);
+            ENFA_GroupingEnd _parentEnd = _patternEnd;
             ENFA_Base lastState = _parentStart;
             ENFA_Base nextState;
             ENFA_Regex_Transition activeTransition = null;
-            while (nextChar.HasValue || !exit)
+            while (nextChar.HasValue && !exit)
             {
                 char? tempNextChar = PeekNextChar(reader);
                 MatchingType matchingType = MatchingType.NotSet;
@@ -36,7 +41,17 @@ namespace ENFA_Parser
                             escaped = true;
                             break;
                         case Constants.ExitContext:
+                            activeTransition = new ENFA_Regex_Transition(TransitionType.GroupingEnd, _parentEnd);
+                            lastState.AddTransition(activeTransition);
                             exit = true;
+                            if (_parentEnd is ENFA_PatternEnd)
+                            {
+                                success = true;
+                            }
+                            else
+                            {
+                                ThrowBuildException(ErrorText.ExitContextBeforePatternEnd);
+                            }
                             break;
                         case Constants.StartOfLine:
                             nextState = new ENFA_State(TransitionType.StartOfLine.ToString(), StateType.Transition);
@@ -51,18 +66,32 @@ namespace ENFA_Parser
                             lastState = nextState;
                             break;
                         case Constants.EndOfLine:
+                            if (lastState is ENFA_PatternStart)
+                            {
+                                ThrowBuildException(ErrorText.EndOfLineAsFirstCharInPattern);
+                            }
                             nextState = new ENFA_State(TransitionType.EndOfLine.ToString(), StateType.Transition);
                             activeTransition = new ENFA_Regex_Transition(TransitionType.EndOfLine, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
+                        case Constants.RightCurlyBracket:
+                            ThrowBuildException(ErrorText.RightCurlyBracketWithoutMatchingLeftCurlyBracket);
+                            break;
                         case Constants.LeftCurlyBracket:
+                            if (lastState is ENFA_PatternStart)
+                            {
+                                ThrowBuildException(ErrorText.LeftCurlyBracketAsFirstCharInPattern);
+                            }
                             int minRepetitions;
                             int maxRepetitions;
                             CheckQuantifiers(reader, out minRepetitions, out maxRepetitions, out matchingType);
                             activeTransition.MinRepetitions = minRepetitions;
                             activeTransition.MaxRepetitions = maxRepetitions;
                             activeTransition.MatchingType = matchingType;
+                            break;
+                        case Constants.RightSquareBracket:
+                            ThrowBuildException(ErrorText.RightSquareBracketWithoutMatchingLeftSquareBracket);
                             break;
                         case Constants.LeftSquareBracket:
                             if (tempNextChar.HasValue && tempNextChar.Value == Constants.CircumflexAccent)
@@ -81,96 +110,134 @@ namespace ENFA_Parser
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
-                        case Constants.LeftParanthesis:
-                            bool recording = true;
+                        case Constants.GroupingStart:
+                            bool recording = Controller.DefaultGroupingRecording;
                             string groupName = null;
                             if (tempNextChar.HasValue && tempNextChar.Value == Constants.QuestionMark)
                             {
                                 /* Consume QuetionMark */
                                 ConsumeNextChar(reader);
                                 char? tempNextChar2 = PeekNextChar(reader);
-                                if (tempNextChar2.Value == Constants.LessThanSign)
+                                switch (tempNextChar2.Value)
                                 {
-                                    /* Consume LessThanSign */
-                                    ConsumeNextChar(reader);
-                                    /* named group */
-                                    groupName = GetGroupName(reader);
-                                    _parentStart = new ENFA_GroupStart(recording, groupName, _parentStart);
-                                    _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, _parentEnd);
-                                }
-                                else if (tempNextChar2.Value == Constants.Colon)
-                                {
-                                    /* Consume Colon */
-                                    ConsumeNextChar(reader);
-                                    /* non-recording group */
-                                    recording = false;
-                                    _parentStart = new ENFA_GroupStart(recording, groupName, _parentStart);
-                                    _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, _parentEnd);
-                                }
-                                else if (tempNextChar2.Value == Constants.EqualsSign)
-                                {
-                                    /* Consume EqualSign */
-                                    ConsumeNextChar(reader);
-                                    /* positive lookahead */
-                                    _parentStart = new ENFA_LookaheadStart(AssertionType.Positive, _parentStart);
-                                    _parentEnd = new ENFA_LookaheadEnd(_parentStart as ENFA_LookaheadStart, _parentEnd);
-                                }
-                                else if (tempNextChar2.Value == Constants.ExclamationMark)
-                                {
-                                    /* Consume ExclamationMark */
-                                    ConsumeNextChar(reader);
-                                    /* negative lookahead */
-                                    _parentStart = new ENFA_LookaheadStart(AssertionType.Negative, _parentStart);
-                                    _parentEnd = new ENFA_LookaheadEnd(_parentStart as ENFA_LookaheadStart, _parentEnd);
-                                }
-                                else if (tempNextChar2.Value == Constants.LessThanSign)
-                                {
-                                    /* Consume ExclamationMark */
-                                    ConsumeNextChar(reader);
-                                    char? tempNextChar3 = PeekNextChar(reader);
-                                    if (tempNextChar3.Value == Constants.EqualsSign)
-                                    {
-                                        /* positive lookbehind */
-                                        _parentStart = new ENFA_LookbehindStart(AssertionType.Positive, _parentStart);
-                                        _parentEnd = new ENFA_LookbehindEnd(_parentStart as ENFA_LookbehindStart, _parentEnd);
-                                    }
-                                    else if (tempNextChar3.Value == Constants.EqualsSign)
-                                    {
-                                        /* negative lookbehind */
-                                        _parentStart = new ENFA_LookbehindStart(AssertionType.Negative, _parentStart);
-                                        _parentEnd = new ENFA_LookbehindEnd(_parentStart as ENFA_LookbehindStart, _parentEnd);
-                                    }
-                                    else
-                                    {
-                                        /* Error */
-                                    }
+                                    case Constants.Colon:
+                                        /* Consume Colon */
+                                        ConsumeNextChar(reader);
+                                        /* non-recording group */
+                                        recording = false;
+                                        _parentStart = new ENFA_GroupStart(recording, groupName, _parentStart);
+                                        _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, _parentEnd);
+                                        break;
+                                    case Constants.GreaterThanSign:
+                                        /* Consume Greater Than Sign */
+                                        ConsumeNextChar(reader);
+                                        /* recording group */
+                                        recording = true;
+                                        _parentStart = new ENFA_GroupStart(recording, groupName, _parentStart);
+                                        _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, _parentEnd);
+                                        break;
+                                    case Constants.EqualsSign:
+                                        /* Consume EqualSign */
+                                        ConsumeNextChar(reader);
+                                        /* positive lookahead */
+                                        _parentStart = new ENFA_LookaheadStart(AssertionType.Positive, _parentStart);
+                                        _parentEnd = new ENFA_LookaheadEnd(_parentStart as ENFA_LookaheadStart, _parentEnd);
+                                        break;
+                                    case Constants.ExclamationMark:
+                                        /* Consume ExclamationMark */
+                                        ConsumeNextChar(reader);
+                                        /* negative lookahead */
+                                        _parentStart = new ENFA_LookaheadStart(AssertionType.Negative, _parentStart);
+                                        _parentEnd = new ENFA_LookaheadEnd(_parentStart as ENFA_LookaheadStart, _parentEnd);
+                                        break;
+                                    case Constants.LessThanSign:
+                                        /* Consume Less Than Sign */
+                                        ConsumeNextChar(reader);
+                                        char? tempNextChar3 = PeekNextChar(reader);
+                                        if (tempNextChar3.Value == Constants.EqualsSign)
+                                        {
+                                            /* Consume Equals Sign */
+                                            ConsumeNextChar(reader);
+                                            /* positive lookbehind */
+                                            _parentStart = new ENFA_LookbehindStart(AssertionType.Positive, _parentStart);
+                                            _parentEnd = new ENFA_LookbehindEnd(_parentStart as ENFA_LookbehindStart, _parentEnd);
+                                        }
+                                        else if (tempNextChar3.Value == Constants.ExclamationMark)
+                                        {
+                                            /* Consume Exclamation Mark */
+                                            ConsumeNextChar(reader);
+                                            /* negative lookbehind */
+                                            _parentStart = new ENFA_LookbehindStart(AssertionType.Negative, _parentStart);
+                                            _parentEnd = new ENFA_LookbehindEnd(_parentStart as ENFA_LookbehindStart, _parentEnd);
+                                        }
+                                        else
+                                        {
+                                            /* named group */
+                                            recording = true;
+                                            groupName = GetGroupName(reader);
+                                            _parentStart = new ENFA_GroupStart(recording, groupName, _parentStart);
+                                            _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, _parentEnd);
+                                        }
+                                        break;
+                                    default:
+                                        ThrowBuildException(ErrorText.GroupingExpectedSpecifierAfterQuestionMark);
+                                        break;
                                 }
                             }
-                            nextState = _parentStart;
+                            else
+                            {
+                                _parentStart = new ENFA_GroupStart(recording, groupName, _parentStart);
+                                _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, _parentEnd);
+                            }
+                            if (_parentEnd is ENFA_LookbehindEnd)
+                            {
+                                nextState = _parentEnd;
+                            }
+                            else
+                            {
+                                nextState = _parentStart;
+                            }
                             activeTransition = new ENFA_Regex_Transition(TransitionType.GroupingStart, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
-                        case Constants.RightParanthesis:
-                            nextState = _parentEnd;
+                        case Constants.GroupingEnd:
+                            if(!(_parentStart is ENFA_GroupingStart))
+                            {
+                                ThrowBuildException(ErrorText.GroupingEndWithoutGroupingStart);
+                            }
+                            if (_parentEnd is ENFA_LookbehindEnd)
+                            {
+                                nextState = _parentStart;
+                            }
+                            else
+                            {
+                                nextState = _parentEnd;
+                            }
                             activeTransition = new ENFA_Regex_Transition(TransitionType.GroupingEnd, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
-                            if(_parentEnd is ENFA_LookbehindEnd)
-                            {
-                                ENFA_LookbehindEnd lookbehindEnd = _parentEnd as ENFA_LookbehindEnd;
-                                lookbehindEnd.Reverse();
-                            }
                             _parentStart = _parentStart.Parent;
                             _parentEnd = _parentEnd.Parent;
                             break;
                         case Constants.VerticalLine:
-                            nextState = _parentStart;
+                            if (_parentEnd is ENFA_LookbehindEnd)
+                            {
+                                nextState = _parentEnd;
+                            }
+                            else
+                            {
+                                nextState = _parentStart;
+                            }
                             activeTransition = new ENFA_Regex_Transition(TransitionType.GroupingEnd, _parentEnd);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case Constants.PlusSign:
+                            if (lastState is ENFA_PatternStart)
+                            {
+                                ThrowBuildException(ErrorText.PlusSignAsFirstCharInPattern);
+                            }
                             if (tempNextChar == Constants.QuestionMark)
                             {
                                 /* Consume Quention Mark */
@@ -195,6 +262,11 @@ namespace ENFA_Parser
                             activeTransition.MatchingType = matchingType;
                             break;
                         case Constants.Asterisk:
+                            if (lastState is ENFA_PatternStart)
+                            {
+                                ThrowBuildException(ErrorText.AsterixAsFirstCharInPattern);
+                            }
+
                             if (tempNextChar == Constants.QuestionMark)
                             {
                                 /* Consume Quention Mark */
@@ -219,6 +291,10 @@ namespace ENFA_Parser
                             activeTransition.MatchingType = matchingType;
                             break;
                         case Constants.QuestionMark:
+                            if (lastState is ENFA_PatternStart)
+                            {
+                                ThrowBuildException(ErrorText.QuestionMarkAsFirstCharInPattern);
+                            }
                             if (tempNextChar == Constants.QuestionMark)
                             {
                                 /* Consume Quention Mark */
@@ -395,7 +471,7 @@ namespace ENFA_Parser
                             lastState = nextState;
                             break;
                         case 'k':
-                            /* Named back reference like k<Bartho> */
+                            /* Named back reference like \k<Bartho> */
                             string groupName = null;
                             if (tempNextChar.HasValue && tempNextChar.Value == Constants.LessThanSign)
                             {
@@ -405,7 +481,7 @@ namespace ENFA_Parser
                             }
                             else
                             {
-                                // TODO Error
+                                ThrowBuildException(ErrorText.NamedBackreferenceMissingStartGroupName);
                             }
                             nextState = new ENFA_PlaceHolder(groupName);
                             activeTransition = new ENFA_Regex_Transition(TransitionType.BackReference, nextState);
@@ -432,8 +508,7 @@ namespace ENFA_Parser
                             lastState = nextState;
                             break;
                         default:
-                            exit = true;
-                            error = true;
+                            ThrowBuildException(ErrorText.CharacterEscapedWithoutBeingExpectedTo);
                             break;
                     }
                     escaped = false;
@@ -443,54 +518,45 @@ namespace ENFA_Parser
                     nextChar = NextCharInStream(reader);
                 }
             }
-            return error;
+            return success;
+        }
+
+        private void ThrowBuildException(string message)
+        {
+            throw new ENFA_RegexBuild_Exception(_currectTerminalName, _matchedCharInRegexBuild.ToArray().ToString(), message);
         }
 
         private void CheckQuantifiers(StreamReader reader, out int minRepetitions, out int maxRepetitions, out MatchingType matchingType)
         {
-            char? matchedChar;
+            char matchedChar;
             minRepetitions = 0;
             maxRepetitions = -1;
             /* Run digits until comma or curly barce end */
             string firstDigit = GetStringUntilChar(reader, new char[] { Constants.Comma, Constants.RightCurlyBracket }, out matchedChar);
             string secondDigit = null;
-            if (!matchedChar.HasValue)
+            if (matchedChar == Constants.RightCurlyBracket && firstDigit == String.Empty)
             {
-                /* Error */
+                ThrowBuildException(ErrorText.EmptyCurlyBraces);
             }
-            else
+            if (firstDigit != String.Empty && !int.TryParse(firstDigit, out minRepetitions))
             {
-                if (matchedChar.Value == Constants.RightCurlyBracket && firstDigit == String.Empty)
+                ThrowBuildException(ErrorText.CouldNotParseMinRepetitions);
+            }
+            else if (matchedChar == Constants.RightCurlyBracket)
+            {
+                maxRepetitions = minRepetitions;
+            }
+            if (matchedChar == Constants.Comma)
+            {
+                /* if comma is found then check digits until curly barce end */
+                secondDigit = GetStringUntilChar(reader, new char[] { Constants.RightCurlyBracket }, out matchedChar);
+                if (secondDigit == String.Empty)
                 {
-                    /* Error */
+                    maxRepetitions = -1;
                 }
-                else if (firstDigit != String.Empty)
+                else if (!int.TryParse(secondDigit, out maxRepetitions))
                 {
-                    if (!int.TryParse(firstDigit, out minRepetitions))
-                    {
-                        /* Error */
-                    }
-                    else if (matchedChar.Value == Constants.RightCurlyBracket)
-                    {
-                        maxRepetitions = minRepetitions;
-                    }
-                    if (matchedChar.Value == Constants.Comma)
-                    {
-                        /* if comma is found then check digits until curly barce end */
-                        secondDigit = GetStringUntilChar(reader, new char[] { Constants.RightCurlyBracket }, out matchedChar);
-                        if (!matchedChar.HasValue)
-                        {
-                            /* Error */
-                        }
-                        else if (secondDigit == String.Empty)
-                        {
-                            maxRepetitions = -1;
-                        }
-                        else if (!int.TryParse(secondDigit, out maxRepetitions))
-                        {
-                            /* Error */
-                        }
-                    }
+                    ThrowBuildException(ErrorText.CouldNotParseMaxRepetitions);
                 }
             }
             /* Check for additional matching type */
@@ -517,21 +583,21 @@ namespace ENFA_Parser
 
         private string GetGroupName(StreamReader reader)
         {
-            char? matchedChar;
+            char matchedChar;
             return GetStringUntilChar(reader, new char[] { Constants.GreaterThanSign }, out matchedChar);
         }
 
-        private string GetStringUntilChar(StreamReader reader, char[] matchingChars, out char? matchedChar)
+        private string GetStringUntilChar(StreamReader reader, char[] matchingChars, out char matchedChar)
         {
             StringBuilder matchedString = new StringBuilder();
             bool exit = false;
-            matchedChar = null;
+            char? tempMatchedChar = null;
             while (!exit)
             {
                 char? nextChar = NextCharInStream(reader);
                 if (!nextChar.HasValue)
                 {
-                    exit = true;
+                    ThrowBuildException(ErrorText.EndOfStreamBeforeCharFound);
                 }
                 else
                 {
@@ -539,8 +605,9 @@ namespace ENFA_Parser
                     {
                         if (nextChar.Value == matchChar)
                         {
-                            matchedChar = nextChar.Value;
+                            tempMatchedChar = nextChar.Value;
                             exit = true;
+                            break;
                         }
                     }
                     if(!exit)
@@ -549,12 +616,25 @@ namespace ENFA_Parser
                     }
                 }
             }
+            if(tempMatchedChar.HasValue)
+            {
+                matchedChar = tempMatchedChar.Value;
+            }
+            else
+            {
+                ThrowBuildException(ErrorText.EndOfStreamBeforeCharFound);
+                matchedChar = Constants.NullChar;// Never hit this
+            }
             return matchedString.ToString();
         }
 
         private void AddCharacterGroup(ENFA_Regex_Transition activeTransition, StreamReader reader)
         {
             bool exit = false;
+            if(PeekNextChar(reader) == Constants.RightSquareBracket)
+            {
+                ThrowBuildException(ErrorText.CharacterClassEmpty);
+            }
             while (!exit)
             {
                 char? nextChar = NextCharInStream(reader);
@@ -571,17 +651,17 @@ namespace ENFA_Parser
                     }
                     else if(nextChar.Value == Constants.Backslash)
                     {
-                        if (tempNextChar.Value == Constants.NewLine)
+                        if (tempNextChar.Value == 'n')
                         {
                             ConsumeNextChar(reader);// Consume New Line
                             activeTransition.AddLiteral(Constants.NewLine);
                         }
-                        else if (tempNextChar.Value == Constants.VerticalTab)
+                        else if (tempNextChar.Value == 'v')
                         {
                             ConsumeNextChar(reader);// Consume Vertical Tab
                             activeTransition.AddLiteral(Constants.VerticalTab);
                         }
-                        else if (tempNextChar.Value == Constants.HorizontalTab)
+                        else if (tempNextChar.Value == 't')
                         {
                             ConsumeNextChar(reader);// Consume Horizontal Tab
                             activeTransition.AddLiteral(Constants.HorizontalTab);
@@ -591,35 +671,39 @@ namespace ENFA_Parser
                             ConsumeNextChar(reader);// Consume Backslash
                             activeTransition.AddLiteral(Constants.Backslash);
                         }
-                        else if (tempNextChar.Value == Constants.FormFeed)
+                        else if (tempNextChar.Value == 'f')
                         {
                             ConsumeNextChar(reader);// Consume Form Feed
                             activeTransition.AddLiteral(Constants.FormFeed);
                         }
-                        else if (tempNextChar.Value == Constants.LineFeed)
+                        else if (tempNextChar.Value == 'r')
                         {
-                            ConsumeNextChar(reader);// Consume Line Feed
-                            activeTransition.AddLiteral(Constants.LineFeed);
+                            ConsumeNextChar(reader);// Consume Carriage Return
+                            activeTransition.AddLiteral(Constants.CarriageReturn);
                         }
-                        else if (tempNextChar.Value == Constants.NullChar)
+                        else if (tempNextChar.Value == '0')
                         {
                             ConsumeNextChar(reader);// Consume Null Char
                             activeTransition.AddLiteral(Constants.NullChar);
                         }
-                        else if (tempNextChar.Value == Constants.Alert)
+                        else if (tempNextChar.Value == 'a')
                         {
                             ConsumeNextChar(reader);// Consume Alert
                             activeTransition.AddLiteral(Constants.Alert);
                         }
-                        else if (tempNextChar.Value == Constants.Escape)
+                        else if (tempNextChar.Value == 'e')
                         {
                             ConsumeNextChar(reader);// Consume Escape
                             activeTransition.AddLiteral(Constants.Escape);
                         }
-                        else if (tempNextChar.Value == Constants.Backspace)
+                        else if (tempNextChar.Value == 'y')
                         {
                             ConsumeNextChar(reader);// Consume Backspace
                             activeTransition.AddLiteral(Constants.Backspace);
+                        }
+                        else
+                        {
+                            ThrowBuildException(ErrorText.CharacterClassEscapedWithoutBeingExpectedTo);
                         }
                     }
                     else
@@ -631,7 +715,7 @@ namespace ENFA_Parser
                             char? endRange = NextCharInStream(reader);
                             if(!endRange.HasValue)
                             {
-                                /* Error */
+                                ThrowBuildException(ErrorText.CharacterRangeHasNoEndValue);
                             }
                             int lowCounter = (int)nextChar.Value;
                             int highCounter = (int) endRange.Value;
@@ -673,7 +757,9 @@ namespace ENFA_Parser
             }
             else
             {
-                return (char)reader.Read();
+                char next = (char)reader.Read();
+                _matchedCharInRegexBuild.Add(next);
+                return next;
             }
         }
     }
