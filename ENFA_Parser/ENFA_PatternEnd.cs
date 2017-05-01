@@ -12,7 +12,7 @@ namespace ENFA_Parser
         private string _terminalName;
 
         //A state can be a pattern end
-        public ENFA_PatternEnd(ENFA_PatternStart patternStart, string terminalName) :base(null)
+        public ENFA_PatternEnd(ENFA_PatternStart patternStart, string terminalName) :base(true, terminalName, null)
         {
             _patternStart = patternStart;
             _terminalName = terminalName;

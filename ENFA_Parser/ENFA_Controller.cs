@@ -14,6 +14,7 @@ namespace ENFA_Parser
         private MatchingType _matchingType;
         private ENFA_PatternStart _patternStart;
         private bool _defaultGroupingRecording;
+        private bool _inDebugMode;
 
         public ENFA_Controller(ParserType parserType)
         {
@@ -29,6 +30,7 @@ namespace ENFA_Parser
                     break;
             }
             _matchingType = MatchingType.LazyMatching;
+            _inDebugMode = false;
         }
 
         public MatchingType DefaultMatchType
@@ -68,6 +70,18 @@ namespace ENFA_Parser
             set
             {
                 _defaultGroupingRecording = value;
+            }
+        }
+
+        public bool InDebugMode
+        {
+            get
+            {
+                return _inDebugMode;
+            }
+            set
+            {
+                _inDebugMode = value;
             }
         }
 

@@ -11,7 +11,7 @@ namespace ENFA_Parser
         private ENFA_LookaheadStart _lookaheadStart;
 
         //A state can be a lookahead end
-        public ENFA_LookaheadEnd(ENFA_LookaheadStart lookaheadStart, ENFA_GroupingEnd parent) : base(parent)
+        public ENFA_LookaheadEnd(ENFA_LookaheadStart lookaheadStart, ENFA_GroupingEnd parent) : base(false, null, parent)
         {
             _lookaheadStart = lookaheadStart;
         }

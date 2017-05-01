@@ -95,8 +95,8 @@ namespace ENFA_Parser
                                     ConsumeNextChar(reader);
                                     /* named group */
                                     groupName = GetGroupName(reader);
-                                    _parentStart = new ENFA_GroupStart(recording, groupName, _parentStart);
-                                    _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, _parentEnd);
+                                    _parentStart = new ENFA_GroupStart(_parentStart);
+                                    _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, recording, groupName, _parentEnd);
                                 }
                                 else if (tempNextChar2.Value == Constants.Colon)
                                 {
@@ -104,8 +104,8 @@ namespace ENFA_Parser
                                     ConsumeNextChar(reader);
                                     /* non-recording group */
                                     recording = false;
-                                    _parentStart = new ENFA_GroupStart(recording, groupName, _parentStart);
-                                    _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, _parentEnd);
+                                    _parentStart = new ENFA_GroupStart(_parentStart);
+                                    _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, recording, groupName, _parentEnd);
                                 }
                                 else if (tempNextChar2.Value == Constants.EqualsSign)
                                 {

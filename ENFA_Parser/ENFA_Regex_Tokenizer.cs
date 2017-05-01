@@ -125,16 +125,16 @@ namespace ENFA_Parser
                                         ConsumeNextChar(reader);
                                         /* non-recording group */
                                         recording = false;
-                                        _parentStart = new ENFA_GroupStart(recording, groupName, _parentStart);
-                                        _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, _parentEnd);
+                                        _parentStart = new ENFA_GroupStart(_parentStart);
+                                        _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, recording, groupName, _parentEnd);
                                         break;
                                     case Constants.GreaterThanSign:
                                         /* Consume Greater Than Sign */
                                         ConsumeNextChar(reader);
                                         /* recording group */
                                         recording = true;
-                                        _parentStart = new ENFA_GroupStart(recording, groupName, _parentStart);
-                                        _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, _parentEnd);
+                                        _parentStart = new ENFA_GroupStart(_parentStart);
+                                        _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, recording, groupName, _parentEnd);
                                         break;
                                     case Constants.EqualsSign:
                                         /* Consume EqualSign */
@@ -175,8 +175,8 @@ namespace ENFA_Parser
                                             /* named group */
                                             recording = true;
                                             groupName = GetGroupName(reader);
-                                            _parentStart = new ENFA_GroupStart(recording, groupName, _parentStart);
-                                            _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, _parentEnd);
+                                            _parentStart = new ENFA_GroupStart(_parentStart);
+                                            _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, recording, groupName, _parentEnd);
                                         }
                                         break;
                                     default:
@@ -186,8 +186,8 @@ namespace ENFA_Parser
                             }
                             else
                             {
-                                _parentStart = new ENFA_GroupStart(recording, groupName, _parentStart);
-                                _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, _parentEnd);
+                                _parentStart = new ENFA_GroupStart(_parentStart);
+                                _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, recording, groupName, _parentEnd);
                             }
                             if (_parentEnd is ENFA_LookbehindEnd)
                             {
@@ -584,7 +584,12 @@ namespace ENFA_Parser
         private string GetGroupName(StreamReader reader)
         {
             char matchedChar;
-            return GetStringUntilChar(reader, new char[] { Constants.GreaterThanSign }, out matchedChar);
+            string groupName = GetStringUntilChar(reader, new char[] { Constants.GreaterThanSign }, out matchedChar);
+            if(string.IsNullOrEmpty(groupName))
+            {
+                ThrowBuildException(ErrorText.NamedGroupCannotBeEmpty);
+            }
+            return groupName;
         }
 
         private string GetStringUntilChar(StreamReader reader, char[] matchingChars, out char matchedChar)

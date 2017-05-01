@@ -28,5 +28,6 @@ namespace ENFA_Parser
         public const string CharacterClassEscapedWithoutBeingExpectedTo = "Character Class escaped without being expected to";
         public const string CharacterClassEmpty = "Character Class empty";
         public const string GroupingExpectedSpecifierAfterQuestionMark = "Grouping expected specifier after Question Mark";
+        public const string NamedGroupCannotBeEmpty = "Named Group cannot be empty";
     }
 }

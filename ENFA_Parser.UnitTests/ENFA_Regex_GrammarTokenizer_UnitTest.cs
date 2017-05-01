@@ -428,6 +428,7 @@ namespace ENFA_Parser.UnitTests
 
         #region Grouping
 
+        [Theory, ENFAParserTestConvensions]
         public void Grouping_Allowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
@@ -435,6 +436,7 @@ namespace ENFA_Parser.UnitTests
             Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
+        [Theory, ENFAParserTestConvensions]
         public void GroupingConcatinatedInside_Allowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
@@ -442,6 +444,7 @@ namespace ENFA_Parser.UnitTests
             Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
+        [Theory, ENFAParserTestConvensions]
         public void GroupingConcatinatedOutsideInFront_Allowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
@@ -449,6 +452,7 @@ namespace ENFA_Parser.UnitTests
             Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
+        [Theory, ENFAParserTestConvensions]
         public void GroupingConcatinatedOutsideBehind_Allowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
@@ -456,6 +460,7 @@ namespace ENFA_Parser.UnitTests
             Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
+        [Theory, ENFAParserTestConvensions]
         public void GroupingNamed_Allowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
@@ -463,13 +468,15 @@ namespace ENFA_Parser.UnitTests
             Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
+        [Theory, ENFAParserTestConvensions]
         public void GroupingNamed_Unnamed_NotAllowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
-            string regexPattern = @"(?<>b)a" + Constants.ExitContext;
+            string regexPattern = @"(?<>b)a\k<>" + Constants.ExitContext;
             Exception ex = Assert.Throws<ENFA_RegexBuild_Exception>(() => regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
+        [Theory, ENFAParserTestConvensions]
         public void GroupingNonRecording_Allowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
@@ -477,6 +484,7 @@ namespace ENFA_Parser.UnitTests
             Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
+        [Theory, ENFAParserTestConvensions]
         public void GroupingPositiveLookahead_Allowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
@@ -484,6 +492,7 @@ namespace ENFA_Parser.UnitTests
             Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
+        [Theory, ENFAParserTestConvensions]
         public void GroupingNegativeLookahead_Allowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
@@ -491,6 +500,7 @@ namespace ENFA_Parser.UnitTests
             Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
+        [Theory, ENFAParserTestConvensions]
         public void GroupingPositiveLookbehind_Allowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
@@ -498,6 +508,7 @@ namespace ENFA_Parser.UnitTests
             Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
+        [Theory, ENFAParserTestConvensions]
         public void GroupingNegativeLookbehind_Allowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
@@ -505,6 +516,7 @@ namespace ENFA_Parser.UnitTests
             Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
+        [Theory, ENFAParserTestConvensions]
         public void GroupingLookbehind_MissingMathingType_NotAllowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
@@ -516,6 +528,7 @@ namespace ENFA_Parser.UnitTests
 
         #region Escaped Characters
 
+        [Theory, ENFAParserTestConvensions]
         public void EscapedCharacters_Literal_Allowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
@@ -523,6 +536,7 @@ namespace ENFA_Parser.UnitTests
             Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
+        [Theory, ENFAParserTestConvensions]
         public void EscapedCharacters_CharacterGroups_Allowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
@@ -530,6 +544,7 @@ namespace ENFA_Parser.UnitTests
             Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
+        [Theory, ENFAParserTestConvensions]
         public void EscapedCharacters_WordBoundaries_Allowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
@@ -537,10 +552,27 @@ namespace ENFA_Parser.UnitTests
             Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
+        [Theory, ENFAParserTestConvensions]
         public void EscapedCharacters_NumericBackReferences_Allowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
             string regexPattern = @"(>1)(>2)(>3)(>4)(>5)(>6)(>7)(>8)(>9)\1\2\3\4\5\6\7\8\9" + Constants.ExitContext;
+            Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
+        }
+
+        [Theory, ENFAParserTestConvensions]
+        public void EscapedCharacters_NamedBackReferences_Allowed()
+        {
+            ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
+            string regexPattern = @"(?<Andreas>)\k<Andreas>" + Constants.ExitContext;
+            Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
+        }
+
+        [Theory, ENFAParserTestConvensions]
+        public void EscapedCharacters_SpecialCharacters_Allowed()
+        {
+            ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
+            string regexPattern = @"\""\{\[\(\)\|\\\.\$\^\?\+\*" + Constants.ExitContext;
             Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 
