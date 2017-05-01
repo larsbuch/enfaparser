@@ -23,5 +23,13 @@ namespace ENFA_Parser
                 return _lookaheadStart;
             }
         }
+
+        internal override void RegisterGroupName(string groupName)
+        {
+            if (Parent != null)
+            {
+                Parent.RegisterGroupName(groupName);
+            }
+        }
     }
 }

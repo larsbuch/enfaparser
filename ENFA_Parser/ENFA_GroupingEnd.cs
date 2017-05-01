@@ -21,16 +21,13 @@ namespace ENFA_Parser
                 groupName = Guid.NewGuid().ToString();
             }
             _groupName = groupName;
-            RegisterGroupName(_groupName);
-        }
-
-        protected virtual void RegisterGroupName(string groupName)
-        {
-            if (_parent != null)
+            if (_recording)
             {
-                _parent.RegisterGroupName(groupName);
+                RegisterGroupName(_groupName);
             }
         }
+
+        internal abstract void RegisterGroupName(string groupName);
 
         public ENFA_GroupingEnd Parent
         {

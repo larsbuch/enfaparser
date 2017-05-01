@@ -29,5 +29,7 @@ namespace ENFA_Parser
         public const string CharacterClassEmpty = "Character Class empty";
         public const string GroupingExpectedSpecifierAfterQuestionMark = "Grouping expected specifier after Question Mark";
         public const string NamedGroupCannotBeEmpty = "Named Group cannot be empty";
+        public const string LookupGroupNameFromNumberTooHighNumber = "Lookup Group Name from number too high number";
+        public const string SpecifiedGroupNameDoesNotExist = "Specified Group Name does not exist";
     }
 }

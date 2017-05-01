@@ -465,7 +465,7 @@ namespace ENFA_Parser
                         case '9':
                             /* Back reference */
                             int groupNumber = int.Parse(nextChar.Value.ToString());
-                            nextState = new ENFA_PlaceHolder(groupNumber);
+                            nextState = new ENFA_PlaceHolder(_patternEnd.LookupGroupNameFromNumber(groupNumber));
                             activeTransition = new ENFA_Regex_Transition(TransitionType.BackReference, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
@@ -478,6 +478,10 @@ namespace ENFA_Parser
                                 /* Consume LessThanSign */
                                 ConsumeNextChar(reader);
                                 groupName = GetGroupName(reader);
+                                if(!_patternEnd.GroupNameExists(groupName))
+                                {
+                                    ThrowBuildException(ErrorText.SpecifiedGroupNameDoesNotExist);
+                                }
                             }
                             else
                             {

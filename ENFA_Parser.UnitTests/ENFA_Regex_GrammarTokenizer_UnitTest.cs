@@ -477,6 +477,22 @@ namespace ENFA_Parser.UnitTests
         }
 
         [Theory, ENFAParserTestConvensions]
+        public void GroupingNamed_BackreferenceNameDoesNotExist_NotAllowed()
+        {
+            ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
+            string regexPattern = @"a\k<Andreas>" + Constants.ExitContext;
+            Exception ex = Assert.Throws<ENFA_RegexBuild_Exception>(() => regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
+        }
+
+        [Theory, ENFAParserTestConvensions]
+        public void GroupingNamed_BackreferenceNumberDoesNotExist_NotAllowed()
+        {
+            ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
+            string regexPattern = @"a\4" + Constants.ExitContext;
+            Exception ex = Assert.Throws<ENFA_RegexBuild_Exception>(() => regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
+        }
+
+        [Theory, ENFAParserTestConvensions]
         public void GroupingNonRecording_Allowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
@@ -556,7 +572,7 @@ namespace ENFA_Parser.UnitTests
         public void EscapedCharacters_NumericBackReferences_Allowed()
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
-            string regexPattern = @"(>1)(>2)(>3)(>4)(>5)(>6)(>7)(>8)(>9)\1\2\3\4\5\6\7\8\9" + Constants.ExitContext;
+            string regexPattern = @"(?>1)(?>2)(?>3)(?>4)(?>5)(?>6)(?>7)(?>8)(?>9)\1\2\3\4\5\6\7\8\9" + Constants.ExitContext;
             Assert.True(regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())));
         }
 

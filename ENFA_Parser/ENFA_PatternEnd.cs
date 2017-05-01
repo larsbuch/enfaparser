@@ -10,6 +10,7 @@ namespace ENFA_Parser
     {
         private ENFA_PatternStart _patternStart;
         private string _terminalName;
+        private List<string> _groupNames = new List<string>();
 
         //A state can be a pattern end
         public ENFA_PatternEnd(ENFA_PatternStart patternStart, string terminalName) :base(true, terminalName, null)
@@ -34,5 +35,23 @@ namespace ENFA_Parser
             }
         }
 
+        internal override void RegisterGroupName(string groupName)
+        {
+            _groupNames.Add(groupName);
+        }
+
+        public string LookupGroupNameFromNumber(int number)
+        {
+            if(number > _groupNames.Count + 1)
+            {
+                throw new ENFA_RegexBuild_Exception(TerminalName,"Unknown",ErrorText.LookupGroupNameFromNumberTooHighNumber);
+            }
+            return _groupNames[number];
+        }
+
+        public bool GroupNameExists(string groupName)
+        {
+            return _groupNames.Contains(groupName);
+        }
     }
 }
