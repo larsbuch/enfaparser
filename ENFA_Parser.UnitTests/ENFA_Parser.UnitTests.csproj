@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="ENFA_Controller_UnitTest.cs" />
     <Compile Include="ENFA_Regex_GrammarTokenizer_UnitTest.cs" />
+    <Compile Include="ENFA_Regex_Parser_UnitTests.cs" />
     <Compile Include="ENFA_Regex_State_CheckPattern_UnitTest.cs" />
     <Compile Include="ENFA_Regex_Transition_UnitTest.cs" />
     <Compile Include="ExtensionMethods.cs" />

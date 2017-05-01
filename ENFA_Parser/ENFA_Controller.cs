@@ -11,6 +11,7 @@ namespace ENFA_Parser
     {
         private ParserType _parserType;
         private ENFA_Tokenizer _grammarTokenizer;
+        private ENFA_Parser _parser;
         private MatchingType _matchingType;
         private ENFA_PatternStart _patternStart;
         private bool _defaultGroupingRecording;
@@ -24,9 +25,11 @@ namespace ENFA_Parser
             {
                 case ParserType.Regex:
                     _grammarTokenizer = new ENFA_Regex_Tokenizer(this);
+                    _parser = new ENFA_Regex_Parser(this);
                     break;
                 case ParserType.Language:
                     _grammarTokenizer = new ENFA_Language_Tokenizer(this);
+                    _parser = new ENFA_Language_Parser(this);
                     break;
             }
             _matchingType = MatchingType.LazyMatching;
@@ -50,6 +53,14 @@ namespace ENFA_Parser
             get
             {
                 return _parserType;
+            }
+        }
+
+        public ENFA_Parser Parser
+        {
+            get
+            {
+                return _parser;
             }
         }
 
