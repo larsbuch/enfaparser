@@ -16,22 +16,24 @@ namespace ENFA_Parser
         private ENFA_PatternStart _patternStart;
         private bool _defaultGroupingRecording;
         private bool _inDebugMode;
+        private ENFA_Factory _factory;
 
         public ENFA_Controller(ParserType parserType)
         {
-            _patternStart = new ENFA_PatternStart();
             _parserType = parserType;
             switch(_parserType)
             {
                 case ParserType.Regex:
-                    _grammarTokenizer = new ENFA_Regex_Tokenizer(this);
-                    _parser = new ENFA_Regex_Parser(this);
+                    _factory = new ENFA_Regex_Factory(this);
+                    _grammarTokenizer = Factory.GetTokenizer();
+                    _parser = Factory.GetParser();
                     break;
                 case ParserType.Language:
-                    _grammarTokenizer = new ENFA_Language_Tokenizer(this);
-                    _parser = new ENFA_Language_Parser(this);
+                    _grammarTokenizer = Factory.GetTokenizer();
+                    _parser = Factory.GetParser();
                     break;
             }
+            _patternStart = new ENFA_PatternStart(this);
             _matchingType = MatchingType.LazyMatching;
             _inDebugMode = false;
         }
@@ -53,6 +55,14 @@ namespace ENFA_Parser
             get
             {
                 return _parserType;
+            }
+        }
+
+        public ENFA_Factory Factory
+        {
+            get
+            {
+                return _factory;
             }
         }
 
@@ -108,24 +118,24 @@ namespace ENFA_Parser
             }
         }
 
-        private StreamReader _streamReader;
+        //private StreamReader _streamReader;
 
-        public void AddStream(Stream stream)
-        {
-            _streamReader = new StreamReader(new BufferedStream(stream, Constants.BufferSize), Constants.StreamEncoding, Constants.DetectStreamEncodingFromByteOrderMarks);
-        }
+        //public void AddStream(Stream stream)
+        //{
+        //    _streamReader = new StreamReader(new BufferedStream(stream, Constants.BufferSize), Constants.StreamEncoding, Constants.DetectStreamEncodingFromByteOrderMarks);
+        //}
 
-        public StreamReader Reader
-        {
-            get
-            {
-                return _streamReader;
-            }
-        }
+        //public StreamReader Reader
+        //{
+        //    get
+        //    {
+        //        return _streamReader;
+        //    }
+        //}
 
-        public IEnumerable<ENFA_Base> Match(Stream stream)
-        {
-            yield return new ENFA_ResetCount(StateType.Negating);
-        }
+        //public IEnumerable<ENFA_Base> Match(Stream stream)
+        //{
+        //    yield return new ENFA_ResetCount(StateType.Negating);
+        //}
     }
 }

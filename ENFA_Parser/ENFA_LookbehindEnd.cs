@@ -11,7 +11,7 @@ namespace ENFA_Parser
         private ENFA_LookbehindStart _lookbehindStart;
 
         //A state can be a lookbehind end
-        public ENFA_LookbehindEnd(ENFA_LookbehindStart lookbehindStart, ENFA_GroupingEnd parent) : base(false, null, parent)
+        public ENFA_LookbehindEnd(ENFA_Controller controller, ENFA_LookbehindStart lookbehindStart, ENFA_GroupingEnd parent) : base(controller, false, null, parent)
         {
             _lookbehindStart = lookbehindStart;
         }

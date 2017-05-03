@@ -11,7 +11,7 @@ namespace ENFA_Parser
         private ENFA_GroupStart _groupStart;
 
         //A state can be a group end
-        public ENFA_GroupEnd(ENFA_GroupStart groupStart, bool recording, string groupName, ENFA_GroupingEnd parent) :base(recording,groupName,parent)
+        public ENFA_GroupEnd(ENFA_Controller controller, ENFA_GroupStart groupStart, bool recording, string groupName, ENFA_GroupingEnd parent) :base(controller, recording,groupName,parent)
         {
             _groupStart = groupStart;
         }

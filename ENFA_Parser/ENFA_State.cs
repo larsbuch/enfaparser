@@ -9,10 +9,7 @@ namespace ENFA_Parser
     {
         private string _stateName;
 
-        public ENFA_State(char stateName, StateType stateType) : this(stateName.ToString(),stateType)
-        { }
-
-        public ENFA_State(string stateName, StateType stateType):base(stateType)
+        public ENFA_State(ENFA_Controller controller,string stateName, StateType stateType):base(controller,stateType)
         {
             _stateName = stateName;
         }

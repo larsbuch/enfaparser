@@ -10,7 +10,7 @@ namespace ENFA_Parser
     {
         private ENFA_GroupingStart _parent;
 
-        public ENFA_GroupingStart(ENFA_GroupingStart parent) :base(StateType.NotApplicable)
+        public ENFA_GroupingStart(ENFA_Controller controller, ENFA_GroupingStart parent) :base(controller, StateType.NotApplicable)
         {
             _parent = parent;
         }

@@ -9,7 +9,7 @@ namespace ENFA_Parser
     public class ENFA_ScopeEnd: ENFA_Base
     {
         //A state# can be a scope end (pops scope off scope stack)
-        public ENFA_ScopeEnd(StateType stateType) : base(stateType)
+        public ENFA_ScopeEnd(ENFA_Controller controller, StateType stateType) : base(controller, stateType)
         { }
     }
 }

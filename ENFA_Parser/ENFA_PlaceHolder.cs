@@ -11,7 +11,7 @@ namespace ENFA_Parser
         private string _groupName;
 
         //A state* can be a placeholder for a recorded group
-        public ENFA_PlaceHolder(string groupName) : base(StateType.NotApplicable)
+        public ENFA_PlaceHolder(ENFA_Controller controller, string groupName) : base(controller, StateType.NotApplicable)
         {
             _groupName = groupName;
         }

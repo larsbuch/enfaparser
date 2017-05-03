@@ -11,7 +11,7 @@ namespace ENFA_Parser
         private AssertionType _assertionType;
 
         //A state can be a lookbehind start
-        public ENFA_LookbehindStart(AssertionType assertionType, ENFA_GroupingStart parent) : base(parent)
+        public ENFA_LookbehindStart(ENFA_Controller controller, AssertionType assertionType, ENFA_GroupingStart parent) : base(controller, parent)
         {
             _assertionType = assertionType;
         }

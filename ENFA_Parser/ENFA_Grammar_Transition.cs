@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ENFA_Parser
 {
-    public class ENFA_Grammar_Transition: ENFA_Transition
+    public class ENFA_Grammar_Transition : ENFA_Transition
     {
         //        A state transition can contain
         //- a counter max or min(* has min 0 and max -1, + has min 1 and max -1, ? has min 0 and max 1, { x,y}
@@ -17,6 +17,8 @@ namespace ENFA_Parser
         //- a non-terminal#
         //- a terminal# matched on regex level
         // contextTransition
-
+        public ENFA_Grammar_Transition(ENFA_Base nextState) : base(nextState)
+        {
+        }
     }
 }

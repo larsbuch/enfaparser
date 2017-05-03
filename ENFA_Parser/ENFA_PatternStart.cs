@@ -9,7 +9,7 @@ namespace ENFA_Parser
     public class ENFA_PatternStart: ENFA_GroupingStart
     {
         //A state can be a pattern start (always recording)
-        public ENFA_PatternStart() : base(null)
+        public ENFA_PatternStart(ENFA_Controller controller) : base(controller,null)
         {
         }
     }

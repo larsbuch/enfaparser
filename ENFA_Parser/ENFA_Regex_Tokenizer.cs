@@ -24,11 +24,11 @@ namespace ENFA_Parser
             bool success = false; // Error until proven correct
             bool exit = false;
             ENFA_GroupingStart _parentStart = Controller.PatternStart;
-            ENFA_PatternEnd _patternEnd = new ENFA_PatternEnd(_parentStart as ENFA_PatternStart, terminalName);
+            ENFA_PatternEnd _patternEnd = Controller.Factory.CreatePatternEnd(_parentStart as ENFA_PatternStart, terminalName);
             ENFA_GroupingEnd _parentEnd = _patternEnd;
             ENFA_Base lastState = _parentStart;
             ENFA_Base nextState;
-            ENFA_Regex_Transition activeTransition = null;
+            ENFA_Transition activeTransition = null;
             while (nextChar.HasValue && !exit)
             {
                 char? tempNextChar = PeekNextChar(reader);
@@ -41,7 +41,7 @@ namespace ENFA_Parser
                             escaped = true;
                             break;
                         case Constants.ExitContext:
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.GroupingEnd, _parentEnd);
+                            activeTransition = lastState.NewTransition(TransitionType.GroupingEnd, _parentEnd);
                             lastState.AddTransition(activeTransition);
                             exit = true;
                             if (_parentEnd is ENFA_PatternEnd)
@@ -54,14 +54,14 @@ namespace ENFA_Parser
                             }
                             break;
                         case Constants.StartOfLine:
-                            nextState = new ENFA_State(TransitionType.StartOfLine.ToString(), StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.StartOfLine, nextState);
+                            nextState = lastState.NewState(TransitionType.StartOfLine.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.StartOfLine, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case Constants.AllButNewLine:
-                            nextState = new ENFA_State(TransitionType.NegateNewLine.ToString(), StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.NegateNewLine, nextState);
+                            nextState = lastState.NewState(TransitionType.NegateNewLine.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.NegateNewLine, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
@@ -70,8 +70,8 @@ namespace ENFA_Parser
                             {
                                 ThrowBuildException(ErrorText.EndOfLineAsFirstCharInPattern);
                             }
-                            nextState = new ENFA_State(TransitionType.EndOfLine.ToString(), StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.EndOfLine, nextState);
+                            nextState = lastState.NewState(TransitionType.EndOfLine.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.EndOfLine, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
@@ -96,17 +96,17 @@ namespace ENFA_Parser
                         case Constants.LeftSquareBracket:
                             if (tempNextChar.HasValue && tempNextChar.Value == Constants.CircumflexAccent)
                             {
-                                nextState = new ENFA_State("Negate Character Group", StateType.Transition);
+                                nextState = lastState.NewState("Negate Character Group", StateType.Transition);
                                 /* Remove CircumfelxAccent */
                                 ConsumeNextChar(reader);
-                                activeTransition = new ENFA_Regex_Transition(TransitionType.NegateLiteral, nextState);
+                                activeTransition = lastState.NewTransition(TransitionType.NegateLiteral, nextState);
                             }
                             else
                             {
-                                nextState = new ENFA_State("Character Group", StateType.Transition);
-                                activeTransition = new ENFA_Regex_Transition(TransitionType.Literal, nextState);
+                                nextState = lastState.NewState("Character Group", StateType.Transition);
+                                activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
                             }
-                            AddCharacterGroup(activeTransition, reader);
+                            AddCharacterGroup((ENFA_Regex_Transition)activeTransition, reader);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
@@ -125,30 +125,30 @@ namespace ENFA_Parser
                                         ConsumeNextChar(reader);
                                         /* non-recording group */
                                         recording = false;
-                                        _parentStart = new ENFA_GroupStart(_parentStart);
-                                        _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, recording, groupName, _parentEnd);
+                                        _parentStart = Controller.Factory.CreateGroupStart(_parentStart);
+                                        _parentEnd = Controller.Factory.CreateGroupEnd(_parentStart as ENFA_GroupStart, recording, groupName, _parentEnd);
                                         break;
                                     case Constants.GreaterThanSign:
                                         /* Consume Greater Than Sign */
                                         ConsumeNextChar(reader);
                                         /* recording group */
                                         recording = true;
-                                        _parentStart = new ENFA_GroupStart(_parentStart);
-                                        _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, recording, groupName, _parentEnd);
+                                        _parentStart = Controller.Factory.CreateGroupStart(_parentStart);
+                                        _parentEnd = Controller.Factory.CreateGroupEnd(_parentStart as ENFA_GroupStart, recording, groupName, _parentEnd);
                                         break;
                                     case Constants.EqualsSign:
                                         /* Consume EqualSign */
                                         ConsumeNextChar(reader);
                                         /* positive lookahead */
-                                        _parentStart = new ENFA_LookaheadStart(AssertionType.Positive, _parentStart);
-                                        _parentEnd = new ENFA_LookaheadEnd(_parentStart as ENFA_LookaheadStart, _parentEnd);
+                                        _parentStart = Controller.Factory.CreateLookaheadStart(AssertionType.Positive, _parentStart);
+                                        _parentEnd = Controller.Factory.CreateLookaheadEnd(_parentStart as ENFA_LookaheadStart, _parentEnd);
                                         break;
                                     case Constants.ExclamationMark:
                                         /* Consume ExclamationMark */
                                         ConsumeNextChar(reader);
                                         /* negative lookahead */
-                                        _parentStart = new ENFA_LookaheadStart(AssertionType.Negative, _parentStart);
-                                        _parentEnd = new ENFA_LookaheadEnd(_parentStart as ENFA_LookaheadStart, _parentEnd);
+                                        _parentStart = Controller.Factory.CreateLookaheadStart(AssertionType.Negative, _parentStart);
+                                        _parentEnd = Controller.Factory.CreateLookaheadEnd(_parentStart as ENFA_LookaheadStart, _parentEnd);
                                         break;
                                     case Constants.LessThanSign:
                                         /* Consume Less Than Sign */
@@ -159,24 +159,24 @@ namespace ENFA_Parser
                                             /* Consume Equals Sign */
                                             ConsumeNextChar(reader);
                                             /* positive lookbehind */
-                                            _parentStart = new ENFA_LookbehindStart(AssertionType.Positive, _parentStart);
-                                            _parentEnd = new ENFA_LookbehindEnd(_parentStart as ENFA_LookbehindStart, _parentEnd);
+                                            _parentStart = Controller.Factory.CreateLookbehindStart(AssertionType.Positive, _parentStart);
+                                            _parentEnd = Controller.Factory.CreateLookbehindEnd(_parentStart as ENFA_LookbehindStart, _parentEnd);
                                         }
                                         else if (tempNextChar3.Value == Constants.ExclamationMark)
                                         {
                                             /* Consume Exclamation Mark */
                                             ConsumeNextChar(reader);
                                             /* negative lookbehind */
-                                            _parentStart = new ENFA_LookbehindStart(AssertionType.Negative, _parentStart);
-                                            _parentEnd = new ENFA_LookbehindEnd(_parentStart as ENFA_LookbehindStart, _parentEnd);
+                                            _parentStart = Controller.Factory.CreateLookbehindStart(AssertionType.Negative, _parentStart);
+                                            _parentEnd = Controller.Factory.CreateLookbehindEnd(_parentStart as ENFA_LookbehindStart, _parentEnd);
                                         }
                                         else
                                         {
                                             /* named group */
                                             recording = true;
                                             groupName = GetGroupName(reader);
-                                            _parentStart = new ENFA_GroupStart(_parentStart);
-                                            _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, recording, groupName, _parentEnd);
+                                            _parentStart = Controller.Factory.CreateGroupStart(_parentStart);
+                                            _parentEnd = Controller.Factory.CreateGroupEnd(_parentStart as ENFA_GroupStart, recording, groupName, _parentEnd);
                                         }
                                         break;
                                     default:
@@ -186,8 +186,8 @@ namespace ENFA_Parser
                             }
                             else
                             {
-                                _parentStart = new ENFA_GroupStart(_parentStart);
-                                _parentEnd = new ENFA_GroupEnd(_parentStart as ENFA_GroupStart, recording, groupName, _parentEnd);
+                                _parentStart = Controller.Factory.CreateGroupStart(_parentStart);
+                                _parentEnd = Controller.Factory.CreateGroupEnd(_parentStart as ENFA_GroupStart, recording, groupName, _parentEnd);
                             }
                             if (_parentEnd is ENFA_LookbehindEnd)
                             {
@@ -197,7 +197,7 @@ namespace ENFA_Parser
                             {
                                 nextState = _parentStart;
                             }
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.GroupingStart, nextState);
+                            activeTransition = lastState.NewTransition(TransitionType.GroupingStart, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
@@ -214,7 +214,7 @@ namespace ENFA_Parser
                             {
                                 nextState = _parentEnd;
                             }
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.GroupingEnd, nextState);
+                            activeTransition = lastState.NewTransition(TransitionType.GroupingEnd, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             _parentStart = _parentStart.Parent;
@@ -229,7 +229,7 @@ namespace ENFA_Parser
                             {
                                 nextState = _parentStart;
                             }
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.GroupingEnd, _parentEnd);
+                            activeTransition = lastState.NewTransition(TransitionType.GroupingEnd, _parentEnd);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
@@ -319,9 +319,9 @@ namespace ENFA_Parser
                             activeTransition.MatchingType = matchingType;
                             break;
                         default:
-                            nextState = new ENFA_State(nextChar.Value, StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.Literal, nextState);
-                            activeTransition.AddLiteral(nextChar.Value);
+                            nextState = lastState.NewState(nextChar.Value, StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            (activeTransition as ENFA_Regex_Transition).AddLiteral(nextChar.Value);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
@@ -333,124 +333,124 @@ namespace ENFA_Parser
                     switch (nextChar.Value)
                     {
                         case '0':
-                            nextState = new ENFA_State("Null Char", StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.Literal, nextState);
-                            activeTransition.AddLiteral(Constants.NullChar);
+                            nextState = lastState.NewState("Null Char", StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            (activeTransition as ENFA_Regex_Transition).AddLiteral(Constants.NullChar);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'a':
-                            nextState = new ENFA_State("Alert", StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.Literal, nextState);
-                            activeTransition.AddLiteral(Constants.Alert);
+                            nextState = lastState.NewState("Alert", StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            (activeTransition as ENFA_Regex_Transition).AddLiteral(Constants.Alert);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'e':
-                            nextState = new ENFA_State("Escape", StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.Literal, nextState);
-                            activeTransition.AddLiteral(Constants.Escape);
+                            nextState = lastState.NewState("Escape", StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            (activeTransition as ENFA_Regex_Transition).AddLiteral(Constants.Escape);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'y':
-                            nextState = new ENFA_State("Backspace", StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.Literal, nextState);
-                            activeTransition.AddLiteral(Constants.Backspace);
+                            nextState = lastState.NewState("Backspace", StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            (activeTransition as ENFA_Regex_Transition).AddLiteral(Constants.Backspace);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'f':
-                            nextState = new ENFA_State("Form Feed", StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.Literal, nextState);
-                            activeTransition.AddLiteral(Constants.FormFeed);
+                            nextState = lastState.NewState("Form Feed", StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            (activeTransition as ENFA_Regex_Transition).AddLiteral(Constants.FormFeed);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'r':
-                            nextState = new ENFA_State("Carriage Return", StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.Literal, nextState);
-                            activeTransition.AddLiteral(Constants.CarriageReturn);
+                            nextState = lastState.NewState("Carriage Return", StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            (activeTransition as ENFA_Regex_Transition).AddLiteral(Constants.CarriageReturn);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 't':
-                            nextState = new ENFA_State("Horizontal Tab", StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.Literal, nextState);
-                            activeTransition.AddLiteral(Constants.HorizontalTab);
+                            nextState = lastState.NewState("Horizontal Tab", StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            (activeTransition as ENFA_Regex_Transition).AddLiteral(Constants.HorizontalTab);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'v':
-                            nextState = new ENFA_State("Vertical Tab", StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.Literal, nextState);
-                            activeTransition.AddLiteral(Constants.VerticalTab);
+                            nextState = lastState.NewState("Vertical Tab", StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            (activeTransition as ENFA_Regex_Transition).AddLiteral(Constants.VerticalTab);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'n':
-                            nextState = new ENFA_State(TransitionType.NewLine.ToString(), StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.NewLine, nextState);
+                            nextState = lastState.NewState(TransitionType.NewLine.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.NewLine, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'w':
-                            nextState = new ENFA_State(TransitionType.Word.ToString(), StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.Word, nextState);
+                            nextState = lastState.NewState(TransitionType.Word.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.Word, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'W':
-                            nextState = new ENFA_State(TransitionType.NegateWord.ToString(), StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.NegateWord, nextState);
+                            nextState = lastState.NewState(TransitionType.NegateWord.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.NegateWord, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'd':
-                            nextState = new ENFA_State(TransitionType.Digit.ToString(), StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.Digit, nextState);
+                            nextState = lastState.NewState(TransitionType.Digit.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.Digit, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'D':
-                            nextState = new ENFA_State(TransitionType.NegateDigit.ToString(), StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.NegateDigit, nextState);
+                            nextState = lastState.NewState(TransitionType.NegateDigit.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.NegateDigit, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 's':
-                            nextState = new ENFA_State(TransitionType.Whitespace.ToString(), StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.Whitespace, nextState);
+                            nextState = lastState.NewState(TransitionType.Whitespace.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.Whitespace, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'S':
-                            nextState = new ENFA_State(TransitionType.NegateWhitespace.ToString(), StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.NegateWhitespace, nextState);
+                            nextState = lastState.NewState(TransitionType.NegateWhitespace.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.NegateWhitespace, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'l':
-                            nextState = new ENFA_State(TransitionType.Letter.ToString(), StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.Letter, nextState);
+                            nextState = lastState.NewState(TransitionType.Letter.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.Letter, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'L':
-                            nextState = new ENFA_State(TransitionType.NegateLetter.ToString(), StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.NegateLetter, nextState);
+                            nextState = lastState.NewState(TransitionType.NegateLetter.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.NegateLetter, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'b':
-                            nextState = new ENFA_State(TransitionType.WordBoundary.ToString(), StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.WordBoundary, nextState);
+                            nextState = lastState.NewState(TransitionType.WordBoundary.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.WordBoundary, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'B':
-                            nextState = new ENFA_State(TransitionType.NegateWordBoundary.ToString(), StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.NegateWordBoundary, nextState);
+                            nextState = lastState.NewState(TransitionType.NegateWordBoundary.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.NegateWordBoundary, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
@@ -465,8 +465,8 @@ namespace ENFA_Parser
                         case '9':
                             /* Back reference */
                             int groupNumber = int.Parse(nextChar.Value.ToString());
-                            nextState = new ENFA_PlaceHolder(_patternEnd.LookupGroupNameFromNumber(groupNumber));
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.BackReference, nextState);
+                            nextState = lastState.NewPlaceHolder(_patternEnd.LookupGroupNameFromNumber(groupNumber));
+                            activeTransition = lastState.NewTransition(TransitionType.BackReference, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
@@ -487,8 +487,8 @@ namespace ENFA_Parser
                             {
                                 ThrowBuildException(ErrorText.NamedBackreferenceMissingStartGroupName);
                             }
-                            nextState = new ENFA_PlaceHolder(groupName);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.BackReference, nextState);
+                            nextState = lastState.NewPlaceHolder(groupName);
+                            activeTransition = lastState.NewTransition(TransitionType.BackReference, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
@@ -505,9 +505,9 @@ namespace ENFA_Parser
                         case Constants.PlusSign:
                         case Constants.Asterisk:
                         case Constants.CircumflexAccent:
-                            nextState = new ENFA_State(nextChar.Value, StateType.Transition);
-                            activeTransition = new ENFA_Regex_Transition(TransitionType.Literal, nextState);
-                            activeTransition.AddLiteral(nextChar.Value);
+                            nextState = lastState.NewState(nextChar.Value, StateType.Transition);
+                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            (activeTransition as ENFA_Regex_Transition).AddLiteral(nextChar.Value);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;

@@ -45,14 +45,15 @@
     <Compile Include="ENFA_Base.cs" />
     <Compile Include="ENFA_ContextSwitch.cs" />
     <Compile Include="ENFA_Controller.cs" />
-    <Compile Include="ENFA_CountUp.cs" />
     <Compile Include="ENFA_Exception.cs" />
+    <Compile Include="ENFA_Factory.cs" />
     <Compile Include="ENFA_Language_Parser.cs" />
     <Compile Include="ENFA_Parser.cs" />
     <Compile Include="ENFA_PatternStart.cs" />
     <Compile Include="ENFA_PatternEnd.cs" />
     <Compile Include="ENFA_Language_Tokenizer.cs" />
     <Compile Include="ENFA_RegexBuild_Exception.cs" />
+    <Compile Include="ENFA_Regex_Factory.cs" />
     <Compile Include="ENFA_Regex_Parser.cs" />
     <Compile Include="ENFA_Tokenizer.cs" />
     <Compile Include="ENFA_Grammar_Transition.cs" />
@@ -66,7 +67,6 @@
     <Compile Include="ENFA_LookbehindStart.cs" />
     <Compile Include="ENFA_PlaceHolder.cs" />
     <Compile Include="ENFA_Regex_Tokenizer.cs" />
-    <Compile Include="ENFA_ResetCount.cs" />
     <Compile Include="ENFA_ScopeEnd.cs" />
     <Compile Include="ENFA_ScopeStart.cs" />
     <Compile Include="ENFA_State.cs" />

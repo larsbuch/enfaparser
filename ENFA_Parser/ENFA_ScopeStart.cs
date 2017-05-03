@@ -9,7 +9,7 @@ namespace ENFA_Parser
     public class ENFA_ScopeStart: ENFA_Base
     {
         //A state# can be a scope start (pushed scope on scope stack)
-        public ENFA_ScopeStart(StateType stateType) : base(stateType)
+        public ENFA_ScopeStart(ENFA_Controller controller, StateType stateType) : base(controller, stateType)
         { }
     }
 }
