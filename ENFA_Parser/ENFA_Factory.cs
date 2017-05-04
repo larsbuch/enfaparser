@@ -24,16 +24,25 @@ namespace ENFA_Parser
         }
 
         public abstract ENFA_Tokenizer GetTokenizer();
-        internal abstract ENFA_Transition CreateTransition(TransitionType transitionType, ENFA_Base nextState);
-        internal abstract ENFA_Base CreateState(string stateName, StateType stateType);
-        internal abstract ENFA_PatternEnd CreatePatternEnd(ENFA_PatternStart patternStart, string terminalName);
-        internal abstract ENFA_GroupingStart CreateGroupStart(ENFA_GroupingStart parentStart);
-        internal abstract ENFA_Parser GetParser();
-        internal abstract ENFA_GroupingEnd CreateGroupEnd(ENFA_GroupStart groupStart, bool recording, string groupName, ENFA_GroupingEnd parentEnd);
-        internal abstract ENFA_GroupingStart CreateLookaheadStart(AssertionType positive, ENFA_GroupingStart parentStart);
-        internal abstract ENFA_GroupingEnd CreateLookaheadEnd(ENFA_LookaheadStart lookaheadStart, ENFA_GroupingEnd parentEnd);
-        internal abstract ENFA_GroupingStart CreateLookbehindStart(AssertionType positive, ENFA_GroupingStart parentStart);
-        internal abstract ENFA_GroupingEnd CreateLookbehindEnd(ENFA_LookbehindStart lookbehindStart, ENFA_GroupingEnd parentEnd);
-        internal abstract ENFA_Base CreatePlaceHolder(string groupName);
+
+        public abstract ENFA_Base CreateState(string stateName, StateType stateType);
+
+        public abstract ENFA_PatternEnd CreatePatternEnd(ENFA_PatternStart patternStart, string terminalName);
+
+        public abstract ENFA_GroupingStart CreateGroupStart(ENFA_GroupingStart parentStart);
+
+        public abstract ENFA_Parser GetParser();
+
+        public abstract ENFA_GroupingEnd CreateGroupEnd(ENFA_GroupStart groupStart, bool recording, string groupName, ENFA_GroupingEnd parentEnd);
+
+        public abstract ENFA_GroupingStart CreateLookaheadStart(AssertionType positive, ENFA_GroupingStart parentStart);
+
+        public abstract ENFA_GroupingEnd CreateLookaheadEnd(ENFA_LookaheadStart lookaheadStart, ENFA_GroupingEnd parentEnd);
+
+        public abstract ENFA_GroupingStart CreateLookbehindStart(AssertionType positive, ENFA_GroupingStart parentStart);
+
+        public abstract ENFA_GroupingEnd CreateLookbehindEnd(ENFA_LookbehindStart lookbehindStart, ENFA_GroupingEnd parentEnd);
+
+        public abstract ENFA_Base CreatePlaceHolder(string groupName);
     }
 }

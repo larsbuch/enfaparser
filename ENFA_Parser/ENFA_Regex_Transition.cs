@@ -19,10 +19,10 @@ namespace ENFA_Parser
         //Done: - a boundry such as word boundry*
         // contextTransition
 
-        private TransitionType _transitionType;
+        private RegexTransitionType _transitionType;
         private List<char> _literal;
 
-        public ENFA_Regex_Transition(TransitionType transitionType, ENFA_Base nextState):base(nextState)
+        public ENFA_Regex_Transition(RegexTransitionType transitionType, ENFA_Base nextState):base(nextState)
         {
             _transitionType = transitionType;
             _literal = new List<char>();
@@ -40,49 +40,49 @@ namespace ENFA_Parser
         {
             switch(_transitionType)
             {
-                case TransitionType.Literal:
+                case RegexTransitionType.Literal:
                     consumesChar = true;
                     return _literal.Contains(nextChar);
-                case TransitionType.NegateLiteral:
+                case RegexTransitionType.NegateLiteral:
                     consumesChar = true;
                     return ! _literal.Contains(nextChar);
-                case TransitionType.Letter:
+                case RegexTransitionType.Letter:
                     consumesChar = true;
                     return Char.IsLetter(nextChar);
-                case TransitionType.NegateLetter:
+                case RegexTransitionType.NegateLetter:
                     consumesChar = true;
                     return !Char.IsLetter(nextChar);
-                case TransitionType.Digit:
+                case RegexTransitionType.Digit:
                     consumesChar = true;
                     return Char.IsDigit(nextChar);
-                case TransitionType.NegateDigit:
+                case RegexTransitionType.NegateDigit:
                     consumesChar = true;
                     return !Char.IsDigit(nextChar);
-                case TransitionType.NewLine:
+                case RegexTransitionType.NewLine:
                     consumesChar = true;
                     return nextChar == Constants.NewLine;
-                case TransitionType.NegateNewLine:
+                case RegexTransitionType.NegateNewLine:
                     consumesChar = true;
                     return nextChar != Constants.NewLine;
-                case TransitionType.Whitespace:
+                case RegexTransitionType.Whitespace:
                     consumesChar = true;
                     return Char.IsWhiteSpace(nextChar);
-                case TransitionType.NegateWhitespace:
+                case RegexTransitionType.NegateWhitespace:
                     consumesChar = true;
                     return !Char.IsWhiteSpace(nextChar);
-                case TransitionType.Word:
+                case RegexTransitionType.Word:
                     consumesChar = true;
                     return WordChar(nextChar);
-                case TransitionType.NegateWord:
+                case RegexTransitionType.NegateWord:
                     consumesChar = true;
                     return !WordChar(nextChar);
-                case TransitionType.WordBoundary:
+                case RegexTransitionType.WordBoundary:
                     consumesChar = false;
                     return WordBoundary(lastChar, nextChar);
-                case TransitionType.NegateWordBoundary:
+                case RegexTransitionType.NegateWordBoundary:
                     consumesChar = false;
                     return !WordBoundary(lastChar, nextChar);
-                case TransitionType.StartOfLine:
+                case RegexTransitionType.StartOfLine:
                     consumesChar = false;
                     if( !lastChar.HasValue || (lastChar.HasValue && lastChar.Value == Constants.NewLine)) 
                     {
@@ -92,7 +92,7 @@ namespace ENFA_Parser
                     {
                         return false;
                     }
-                case TransitionType.EndOfLine:
+                case RegexTransitionType.EndOfLine:
                     consumesChar = false;
                     if(nextChar == Constants.NewLine)
                     {
@@ -102,7 +102,7 @@ namespace ENFA_Parser
                     {
                         return false;
                     }
-                case TransitionType.ExitState:
+                case RegexTransitionType.ExitContext:
                     consumesChar = true;
                     return true;
                 default:

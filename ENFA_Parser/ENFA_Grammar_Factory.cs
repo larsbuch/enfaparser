@@ -6,25 +6,25 @@ using System.Threading.Tasks;
 
 namespace ENFA_Parser
 {
-    public class ENFA_Regex_Factory : ENFA_Factory
+    public class ENFA_Grammar_Factory : ENFA_Factory
     {
-        private ENFA_Regex_Tokenizer _regexTokenizer;
-        private ENFA_Parser _regexParser;
+        private ENFA_Grammar_Tokenizer _grammarTokenizer;
+        private ENFA_Parser _grammarParser;
 
-        public ENFA_Regex_Factory(ENFA_Controller controller) : base(controller)
+        public ENFA_Grammar_Factory(ENFA_Controller controller) : base(controller)
         {
-            _regexTokenizer = new ENFA_Regex_Tokenizer(controller);
-            _regexParser = new ENFA_Regex_Parser(controller);
+            _grammarTokenizer = new ENFA_Grammar_Tokenizer(controller);
+            _grammarParser = new ENFA_Grammar_Parser(controller);
         }
 
         public override ENFA_Tokenizer GetTokenizer()
         {
-            return _regexTokenizer;
+            return _grammarTokenizer;
         }
 
         public override ENFA_Parser GetParser()
         {
-            return _regexParser;
+            return _grammarParser;
         }
 
         public override ENFA_GroupingEnd CreateGroupEnd(ENFA_GroupStart groupStart, bool recording, string groupName, ENFA_GroupingEnd parentEnd)
@@ -72,9 +72,9 @@ namespace ENFA_Parser
             return new ENFA_State(Controller, stateName, stateType);
         }
 
-        public ENFA_Regex_Transition CreateRegexTransition(RegexTransitionType transitionType, ENFA_Base nextState)
+        public ENFA_Grammar_Transition CreateGrammarTransition(GrammarTransitionType transitionType, ENFA_Base nextState)
         {
-            return new ENFA_Regex_Transition(transitionType, nextState);
+            return new ENFA_Grammar_Transition(transitionType, nextState);
         }
     }
 }

@@ -18,10 +18,10 @@ namespace ENFA_Parser
     public enum ParserType
     {
         Regex,
-        Language
+        Grammar
     }
 
-    public enum TransitionType
+    public enum RegexTransitionType
     {
         Literal,
         NegateLiteral,
@@ -39,7 +39,15 @@ namespace ENFA_Parser
         NegateWordBoundary,
         StartOfLine,
         EndOfLine,
-        ExitState,
+        ExitContext,
+        BackReference,
+        GroupingStart,
+        GroupingEnd
+    }
+
+    public enum GrammarTransitionType
+    {
+        SwitchContext,
         BackReference,
         GroupingStart,
         GroupingEnd

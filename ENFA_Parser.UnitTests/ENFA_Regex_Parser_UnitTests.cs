@@ -15,7 +15,7 @@ namespace ENFA_Parser.UnitTests
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
             string regexPattern = @"a" + Constants.ExitContext;
-            regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream()));
+            regex.Tokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream()));
             string regexString = @"a";
             Assert.True(regex.Parser.ParseStream(new StreamReader(regexString.ToStream())));
         }
@@ -25,7 +25,7 @@ namespace ENFA_Parser.UnitTests
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
             string regexPattern = @"a" + Constants.ExitContext;
-            regex.GrammarTokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream()));
+            regex.Tokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream()));
             string regexString = @"b";
             Assert.False(regex.Parser.ParseStream(new StreamReader(regexString.ToStream())));
         }

@@ -61,11 +61,30 @@ namespace ENFA_Parser
             }
         }
 
-        internal virtual ENFA_Transition NewTransition(TransitionType transitionType, ENFA_Base nextState)
+        internal virtual ENFA_Transition NewGrammarTransition(GrammarTransitionType transitionType, ENFA_Base nextState)
         {
+            if (Controller.ParserType == ParserType.Regex)
+            {
+                throw new NotImplementedException();
+
+                //                throw new ENFA_RegexBuild_Exception();
+            }
             throw new NotImplementedException();
             /* Look through transitions for TransitionType and NextState and if none are matching create a new otherwise return the existing */
-            return Controller.Factory.CreateTransition(transitionType, nextState);
+            return (Controller.Factory as ENFA_Grammar_Factory).CreateGrammarTransition(transitionType, nextState);
+        }
+
+        internal virtual ENFA_Transition NewRegexTransition(RegexTransitionType transitionType, ENFA_Base nextState)
+        {
+            if(Controller.ParserType == ParserType.Grammar)
+            {
+                throw new NotImplementedException();
+
+//                throw new ENFA_GrammarBuild_Exception();
+            }
+            throw new NotImplementedException();
+            /* Look through transitions for TransitionType and NextState and if none are matching create a new otherwise return the existing */
+            return (Controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(transitionType, nextState);
         }
 
         internal virtual ENFA_Base NewState(char stateName, StateType stateType)

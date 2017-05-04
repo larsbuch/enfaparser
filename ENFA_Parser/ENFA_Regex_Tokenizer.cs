@@ -41,7 +41,7 @@ namespace ENFA_Parser
                             escaped = true;
                             break;
                         case Constants.ExitContext:
-                            activeTransition = lastState.NewTransition(TransitionType.GroupingEnd, _parentEnd);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.GroupingEnd, _parentEnd);
                             lastState.AddTransition(activeTransition);
                             exit = true;
                             if (_parentEnd is ENFA_PatternEnd)
@@ -54,14 +54,14 @@ namespace ENFA_Parser
                             }
                             break;
                         case Constants.StartOfLine:
-                            nextState = lastState.NewState(TransitionType.StartOfLine.ToString(), StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.StartOfLine, nextState);
+                            nextState = lastState.NewState(RegexTransitionType.StartOfLine.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.StartOfLine, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case Constants.AllButNewLine:
-                            nextState = lastState.NewState(TransitionType.NegateNewLine.ToString(), StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.NegateNewLine, nextState);
+                            nextState = lastState.NewState(RegexTransitionType.NegateNewLine.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.NegateNewLine, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
@@ -70,8 +70,8 @@ namespace ENFA_Parser
                             {
                                 ThrowBuildException(ErrorText.EndOfLineAsFirstCharInPattern);
                             }
-                            nextState = lastState.NewState(TransitionType.EndOfLine.ToString(), StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.EndOfLine, nextState);
+                            nextState = lastState.NewState(RegexTransitionType.EndOfLine.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.EndOfLine, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
@@ -99,12 +99,12 @@ namespace ENFA_Parser
                                 nextState = lastState.NewState("Negate Character Group", StateType.Transition);
                                 /* Remove CircumfelxAccent */
                                 ConsumeNextChar(reader);
-                                activeTransition = lastState.NewTransition(TransitionType.NegateLiteral, nextState);
+                                activeTransition = lastState.NewRegexTransition(RegexTransitionType.NegateLiteral, nextState);
                             }
                             else
                             {
                                 nextState = lastState.NewState("Character Group", StateType.Transition);
-                                activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                                activeTransition = lastState.NewRegexTransition(RegexTransitionType.Literal, nextState);
                             }
                             AddCharacterGroup((ENFA_Regex_Transition)activeTransition, reader);
                             lastState.AddTransition(activeTransition);
@@ -197,7 +197,7 @@ namespace ENFA_Parser
                             {
                                 nextState = _parentStart;
                             }
-                            activeTransition = lastState.NewTransition(TransitionType.GroupingStart, nextState);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.GroupingStart, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
@@ -214,7 +214,7 @@ namespace ENFA_Parser
                             {
                                 nextState = _parentEnd;
                             }
-                            activeTransition = lastState.NewTransition(TransitionType.GroupingEnd, nextState);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.GroupingEnd, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             _parentStart = _parentStart.Parent;
@@ -229,7 +229,7 @@ namespace ENFA_Parser
                             {
                                 nextState = _parentStart;
                             }
-                            activeTransition = lastState.NewTransition(TransitionType.GroupingEnd, _parentEnd);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.GroupingEnd, _parentEnd);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
@@ -320,7 +320,7 @@ namespace ENFA_Parser
                             break;
                         default:
                             nextState = lastState.NewState(nextChar.Value, StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.Literal, nextState);
                             (activeTransition as ENFA_Regex_Transition).AddLiteral(nextChar.Value);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
@@ -334,123 +334,123 @@ namespace ENFA_Parser
                     {
                         case '0':
                             nextState = lastState.NewState("Null Char", StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.Literal, nextState);
                             (activeTransition as ENFA_Regex_Transition).AddLiteral(Constants.NullChar);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'a':
                             nextState = lastState.NewState("Alert", StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.Literal, nextState);
                             (activeTransition as ENFA_Regex_Transition).AddLiteral(Constants.Alert);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'e':
                             nextState = lastState.NewState("Escape", StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.Literal, nextState);
                             (activeTransition as ENFA_Regex_Transition).AddLiteral(Constants.Escape);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'y':
                             nextState = lastState.NewState("Backspace", StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.Literal, nextState);
                             (activeTransition as ENFA_Regex_Transition).AddLiteral(Constants.Backspace);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'f':
                             nextState = lastState.NewState("Form Feed", StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.Literal, nextState);
                             (activeTransition as ENFA_Regex_Transition).AddLiteral(Constants.FormFeed);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'r':
                             nextState = lastState.NewState("Carriage Return", StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.Literal, nextState);
                             (activeTransition as ENFA_Regex_Transition).AddLiteral(Constants.CarriageReturn);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 't':
                             nextState = lastState.NewState("Horizontal Tab", StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.Literal, nextState);
                             (activeTransition as ENFA_Regex_Transition).AddLiteral(Constants.HorizontalTab);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'v':
                             nextState = lastState.NewState("Vertical Tab", StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.Literal, nextState);
                             (activeTransition as ENFA_Regex_Transition).AddLiteral(Constants.VerticalTab);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'n':
-                            nextState = lastState.NewState(TransitionType.NewLine.ToString(), StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.NewLine, nextState);
+                            nextState = lastState.NewState(RegexTransitionType.NewLine.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.NewLine, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'w':
-                            nextState = lastState.NewState(TransitionType.Word.ToString(), StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.Word, nextState);
+                            nextState = lastState.NewState(RegexTransitionType.Word.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.Word, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'W':
-                            nextState = lastState.NewState(TransitionType.NegateWord.ToString(), StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.NegateWord, nextState);
+                            nextState = lastState.NewState(RegexTransitionType.NegateWord.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.NegateWord, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'd':
-                            nextState = lastState.NewState(TransitionType.Digit.ToString(), StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.Digit, nextState);
+                            nextState = lastState.NewState(RegexTransitionType.Digit.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.Digit, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'D':
-                            nextState = lastState.NewState(TransitionType.NegateDigit.ToString(), StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.NegateDigit, nextState);
+                            nextState = lastState.NewState(RegexTransitionType.NegateDigit.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.NegateDigit, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 's':
-                            nextState = lastState.NewState(TransitionType.Whitespace.ToString(), StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.Whitespace, nextState);
+                            nextState = lastState.NewState(RegexTransitionType.Whitespace.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.Whitespace, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'S':
-                            nextState = lastState.NewState(TransitionType.NegateWhitespace.ToString(), StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.NegateWhitespace, nextState);
+                            nextState = lastState.NewState(RegexTransitionType.NegateWhitespace.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.NegateWhitespace, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'l':
-                            nextState = lastState.NewState(TransitionType.Letter.ToString(), StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.Letter, nextState);
+                            nextState = lastState.NewState(RegexTransitionType.Letter.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.Letter, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'L':
-                            nextState = lastState.NewState(TransitionType.NegateLetter.ToString(), StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.NegateLetter, nextState);
+                            nextState = lastState.NewState(RegexTransitionType.NegateLetter.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.NegateLetter, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'b':
-                            nextState = lastState.NewState(TransitionType.WordBoundary.ToString(), StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.WordBoundary, nextState);
+                            nextState = lastState.NewState(RegexTransitionType.WordBoundary.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.WordBoundary, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
                         case 'B':
-                            nextState = lastState.NewState(TransitionType.NegateWordBoundary.ToString(), StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.NegateWordBoundary, nextState);
+                            nextState = lastState.NewState(RegexTransitionType.NegateWordBoundary.ToString(), StateType.Transition);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.NegateWordBoundary, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
@@ -466,7 +466,7 @@ namespace ENFA_Parser
                             /* Back reference */
                             int groupNumber = int.Parse(nextChar.Value.ToString());
                             nextState = lastState.NewPlaceHolder(_patternEnd.LookupGroupNameFromNumber(groupNumber));
-                            activeTransition = lastState.NewTransition(TransitionType.BackReference, nextState);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.BackReference, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
@@ -488,7 +488,7 @@ namespace ENFA_Parser
                                 ThrowBuildException(ErrorText.NamedBackreferenceMissingStartGroupName);
                             }
                             nextState = lastState.NewPlaceHolder(groupName);
-                            activeTransition = lastState.NewTransition(TransitionType.BackReference, nextState);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.BackReference, nextState);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;
                             break;
@@ -506,7 +506,7 @@ namespace ENFA_Parser
                         case Constants.Asterisk:
                         case Constants.CircumflexAccent:
                             nextState = lastState.NewState(nextChar.Value, StateType.Transition);
-                            activeTransition = lastState.NewTransition(TransitionType.Literal, nextState);
+                            activeTransition = lastState.NewRegexTransition(RegexTransitionType.Literal, nextState);
                             (activeTransition as ENFA_Regex_Transition).AddLiteral(nextChar.Value);
                             lastState.AddTransition(activeTransition);
                             lastState = nextState;

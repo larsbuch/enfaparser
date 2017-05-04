@@ -10,7 +10,7 @@ namespace ENFA_Parser
     public class ENFA_Controller
     {
         private ParserType _parserType;
-        private ENFA_Tokenizer _grammarTokenizer;
+        private ENFA_Tokenizer _tokenizer;
         private ENFA_Parser _parser;
         private MatchingType _matchingType;
         private ENFA_PatternStart _patternStart;
@@ -25,11 +25,11 @@ namespace ENFA_Parser
             {
                 case ParserType.Regex:
                     _factory = new ENFA_Regex_Factory(this);
-                    _grammarTokenizer = Factory.GetTokenizer();
+                    _tokenizer = Factory.GetTokenizer();
                     _parser = Factory.GetParser();
                     break;
-                case ParserType.Language:
-                    _grammarTokenizer = Factory.GetTokenizer();
+                case ParserType.Grammar:
+                    _tokenizer = Factory.GetTokenizer();
                     _parser = Factory.GetParser();
                     break;
             }
@@ -106,15 +106,15 @@ namespace ENFA_Parser
             }
         }
 
-        public ENFA_Tokenizer GrammarTokenizer
+        public ENFA_Tokenizer Tokenizer
         {
             get
             {
-                return _grammarTokenizer;
+                return _tokenizer;
             }
             set
             {
-                _grammarTokenizer = value;
+                _tokenizer = value;
             }
         }
 

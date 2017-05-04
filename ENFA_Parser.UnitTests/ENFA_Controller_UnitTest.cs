@@ -25,14 +25,14 @@ namespace ENFA_Parser.UnitTests
         }
 
         [Theory, ENFAParserTestConvensions]
-        public void CreateLanguageInstanceWithoutError()
+        public void CreateGrammarInstanceWithoutError()
         {
             Exception expected = null;
             Exception actual = null;
             ENFA_Controller controller;
             try
             {
-                controller = new ENFA_Controller(ParserType.Language);
+                controller = new ENFA_Controller(ParserType.Grammar);
             }
             catch (Exception ex)
             {
@@ -42,7 +42,7 @@ namespace ENFA_Parser.UnitTests
         }
 
         [Theory, ENFAParserTestConvensions]
-        public void SetGrammarTokenizer()
+        public void SetTokenizer()
         {
             Exception expected = null;
             Exception actual = null;
@@ -50,7 +50,7 @@ namespace ENFA_Parser.UnitTests
             try
             {
                 controller = new ENFA_Controller(ParserType.Regex);
-                controller.GrammarTokenizer = new ENFA_Regex_Tokenizer(controller);
+                controller.Tokenizer = new ENFA_Regex_Tokenizer(controller);
             }
             catch (Exception ex)
             {

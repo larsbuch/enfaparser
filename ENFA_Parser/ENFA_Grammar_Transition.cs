@@ -17,8 +17,11 @@ namespace ENFA_Parser
         //- a non-terminal#
         //- a terminal# matched on regex level
         // contextTransition
-        public ENFA_Grammar_Transition(ENFA_Base nextState) : base(nextState)
+        private GrammarTransitionType _transitionType;
+
+        public ENFA_Grammar_Transition(GrammarTransitionType transitionType, ENFA_Base nextState) : base(nextState)
         {
+            _transitionType = transitionType;
         }
     }
 }

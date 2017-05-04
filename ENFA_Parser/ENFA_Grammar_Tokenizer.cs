@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 
 namespace ENFA_Parser
 {
-    public class ENFA_Language_Parser : ENFA_Parser
+    public class ENFA_Grammar_Tokenizer : ENFA_Tokenizer
     {
-        public ENFA_Language_Parser(ENFA_Controller controller) : base(controller)
+        public ENFA_Grammar_Tokenizer(ENFA_Controller controller):base(controller)
         { }
 
-        public override bool ParseStream(StreamReader reader)
+        public override bool Tokenize(string ternimalName, StreamReader reader)
         {
             throw new NotImplementedException();
         }
+
     }
 }
