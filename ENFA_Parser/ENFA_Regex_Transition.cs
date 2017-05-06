@@ -110,6 +110,14 @@ namespace ENFA_Parser
             }
         }
 
+        public RegexTransitionType TransitionType
+        {
+            get
+            {
+                return _transitionType;
+            }
+        }
+
         private bool WordChar(char? testChar)
         {
             if (testChar.HasValue)

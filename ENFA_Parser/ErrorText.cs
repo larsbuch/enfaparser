@@ -31,5 +31,7 @@ namespace ENFA_Parser
         public const string NamedGroupCannotBeEmpty = "Named Group cannot be empty";
         public const string LookupGroupNameFromNumberTooHighNumber = "Lookup Group Name from number too high number";
         public const string SpecifiedGroupNameDoesNotExist = "Specified Group Name does not exist";
+        public const string TryingToCreateNewGrammarTransitionInRegex = "Trying to create new Grammar Transition in regex";
+        public const string TryingToCreateNewRegexTransitionInGrammar = "Trying to create new Regex Transition in grammar";
     }
 }

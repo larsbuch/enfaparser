@@ -29,6 +29,7 @@ namespace ENFA_Parser
                     _parser = Factory.GetParser();
                     break;
                 case ParserType.Grammar:
+                    _factory = new ENFA_Grammar_Factory(this);
                     _tokenizer = Factory.GetTokenizer();
                     _parser = Factory.GetParser();
                     break;

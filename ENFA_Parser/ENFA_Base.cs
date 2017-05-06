@@ -65,12 +65,16 @@ namespace ENFA_Parser
         {
             if (Controller.ParserType == ParserType.Regex)
             {
-                throw new NotImplementedException();
-
-                //                throw new ENFA_RegexBuild_Exception();
+                throw new ENFA_RegexBuild_Exception(ErrorText.TryingToCreateNewGrammarTransitionInRegex);
             }
-            throw new NotImplementedException();
-            /* Look through transitions for TransitionType and NextState and if none are matching create a new otherwise return the existing */
+            foreach (ENFA_Transition transition in GetTransitions)
+            {
+                ENFA_Base state = transition.Transition();
+                if ((transition as ENFA_Grammar_Transition).TransitionType == transitionType && state.Equals(nextState))
+                {
+                    return transition;
+                }
+            }
             return (Controller.Factory as ENFA_Grammar_Factory).CreateGrammarTransition(transitionType, nextState);
         }
 
@@ -78,12 +82,16 @@ namespace ENFA_Parser
         {
             if(Controller.ParserType == ParserType.Grammar)
             {
-                throw new NotImplementedException();
-
-//                throw new ENFA_GrammarBuild_Exception();
+                throw new ENFA_GrammarBuild_Exception(ErrorText.TryingToCreateNewRegexTransitionInGrammar);
             }
-            throw new NotImplementedException();
-            /* Look through transitions for TransitionType and NextState and if none are matching create a new otherwise return the existing */
+            foreach (ENFA_Transition transition in GetTransitions)
+            {
+                ENFA_Base state = transition.Transition();
+                if ((transition as ENFA_Regex_Transition).TransitionType == transitionType && state.Equals(nextState))
+                {
+                    return transition;
+                }
+            }
             return (Controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(transitionType, nextState);
         }
 
@@ -94,8 +102,14 @@ namespace ENFA_Parser
 
         internal virtual ENFA_Base NewState(string stateName, StateType stateType)
         {
-            throw new NotImplementedException();
-            /* Look through transitions for NextState and if none are matching create a new otherwise return the existing */
+            foreach(ENFA_Transition transition in GetTransitions)
+            {
+                ENFA_Base state = transition.Transition();
+                if(state.StateName.Equals(StateName) && state.StateType == stateType)
+                {
+                    return state;
+                }
+            }
             return Controller.Factory.CreateState(stateName, stateType);
         }
 

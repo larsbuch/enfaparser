@@ -23,5 +23,13 @@ namespace ENFA_Parser
         {
             _transitionType = transitionType;
         }
+
+        public GrammarTransitionType TransitionType
+        {
+            get
+            {
+                return _transitionType;
+            }
+        }
     }
 }
