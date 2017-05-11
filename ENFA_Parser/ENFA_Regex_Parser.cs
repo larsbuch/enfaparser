@@ -12,9 +12,19 @@ namespace ENFA_Parser
         public ENFA_Regex_Parser(ENFA_Controller controller):base(controller)
         { }
 
-        public override bool ParseStream(StreamReader reader)
+        public IEnumerable<List<ENFA_Match>> NextMatches()
         {
-            throw new NotImplementedException();
+            List<ENFA_Match> matchList = Controller.Factory.CreateMatchList();
+            List<ENFA_MatchPath> currentMatchPaths = Controller.Factory.CreateMatchPathList();
+            while (currentMatchPaths.Count > 0)
+            {
+                matchList.Clear();
+                foreach (ENFA_MatchPath lexerPath in currentMatchPaths)
+                {
+                    NextTokens(lexerPath, matchList);
+                }
+                yield return matchList;
+            }
         }
     }
 }

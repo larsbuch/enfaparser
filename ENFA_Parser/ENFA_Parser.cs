@@ -10,6 +10,7 @@ namespace ENFA_Parser
     public abstract class ENFA_Parser
     {
         private ENFA_Controller _controller;
+        private StreamReader _streamReader;
 
         public ENFA_Parser(ENFA_Controller controller)
         {
@@ -24,6 +25,16 @@ namespace ENFA_Parser
             }
         }
 
-        public abstract bool ParseStream(StreamReader reader);
+        public StreamReader StreamReader
+        {
+            get
+            {
+                return _streamReader;
+            }
+            set
+            {
+                _streamReader = value;
+            }
+        }
     }
 }

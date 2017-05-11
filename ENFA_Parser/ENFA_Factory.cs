@@ -44,5 +44,9 @@ namespace ENFA_Parser
         public abstract ENFA_GroupingEnd CreateLookbehindEnd(ENFA_LookbehindStart lookbehindStart, ENFA_GroupingEnd parentEnd);
 
         public abstract ENFA_Base CreatePlaceHolder(string groupName);
+
+        public abstract List<ENFA_Match> CreateMatchList();
+
+        public abstract List<ENFA_MatchPath> CreateMatchPathList();
     }
 }
