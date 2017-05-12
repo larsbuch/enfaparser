@@ -86,9 +86,14 @@ namespace ENFA_Parser
                             int minRepetitions;
                             int maxRepetitions;
                             CheckQuantifiers(reader, out minRepetitions, out maxRepetitions, out matchingType);
-                            activeTransition.MinRepetitions = minRepetitions;
-                            activeTransition.MaxRepetitions = maxRepetitions;
-                            activeTransition.MatchingType = matchingType;
+                            if (lastState is ENFA_GroupEnd)
+                            {
+                                SetTransitionCount((lastState as ENFA_GroupEnd).GroupStart, activeTransition, minRepetitions, maxRepetitions, matchingType);
+                            }
+                            else
+                            {
+                                SetTransitionCount(lastState, activeTransition, minRepetitions, maxRepetitions, matchingType);
+                            }
                             break;
                         case Constants.RightSquareBracket:
                             ThrowBuildException(ErrorText.RightSquareBracketWithoutMatchingLeftSquareBracket);
@@ -257,9 +262,16 @@ namespace ENFA_Parser
                                 /* Use default matching */
                                 matchingType = Controller.DefaultMatchType;
                             }
-                            activeTransition.MinRepetitions = 1;
-                            activeTransition.MaxRepetitions = -1;
-                            activeTransition.MatchingType = matchingType;
+                            minRepetitions = 1;
+                            maxRepetitions = -1;
+                            if (lastState is ENFA_GroupEnd)
+                            {
+                                SetTransitionCount((lastState as ENFA_GroupEnd).GroupStart, activeTransition, minRepetitions, maxRepetitions, matchingType);
+                            }
+                            else
+                            {
+                                SetTransitionCount(lastState, activeTransition, minRepetitions, maxRepetitions, matchingType);
+                            }
                             break;
                         case Constants.Asterisk:
                             if (lastState is ENFA_PatternStart)
@@ -286,9 +298,16 @@ namespace ENFA_Parser
                                 /* Use default matching */
                                 matchingType = Controller.DefaultMatchType;
                             }
-                            activeTransition.MinRepetitions = 0;
-                            activeTransition.MaxRepetitions = -1;
-                            activeTransition.MatchingType = matchingType;
+                            minRepetitions = 0;
+                            maxRepetitions = -1;
+                            if (lastState is ENFA_GroupEnd)
+                            {
+                                SetTransitionCount((lastState as ENFA_GroupEnd).GroupStart, activeTransition, minRepetitions, maxRepetitions, matchingType);
+                            }
+                            else
+                            {
+                                SetTransitionCount(lastState, activeTransition, minRepetitions, maxRepetitions, matchingType);
+                            }
                             break;
                         case Constants.QuestionMark:
                             if (lastState is ENFA_PatternStart)
@@ -314,9 +333,16 @@ namespace ENFA_Parser
                                 /* Use default matching */
                                 matchingType = Controller.DefaultMatchType;
                             }
-                            activeTransition.MinRepetitions = 0;
-                            activeTransition.MaxRepetitions = 1;
-                            activeTransition.MatchingType = matchingType;
+                            minRepetitions = 0;
+                            maxRepetitions = 1;
+                            if (lastState is ENFA_GroupEnd)
+                            {
+                                SetTransitionCount((lastState as ENFA_GroupEnd).GroupStart, activeTransition, minRepetitions, maxRepetitions, matchingType);
+                            }
+                            else
+                            {
+                                SetTransitionCount(lastState, activeTransition, minRepetitions, maxRepetitions, matchingType);
+                            }
                             break;
                         default:
                             nextState = lastState.NewState(nextChar.Value, StateType.Transition);
@@ -523,6 +549,13 @@ namespace ENFA_Parser
                 }
             }
             return success;
+        }
+
+        private void SetTransitionCount(ENFA_Base state, ENFA_Transition transition, int minRepetitions, int maxRepetitions, MatchingType matchingType)
+        {
+            state.MinRepetitions = minRepetitions;
+            state.MaxRepetitions = maxRepetitions;
+            transition.MatchingType = matchingType;
         }
 
         private void ThrowBuildException(string message)

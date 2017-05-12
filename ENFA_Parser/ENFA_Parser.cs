@@ -36,5 +36,10 @@ namespace ENFA_Parser
                 _streamReader = value;
             }
         }
+
+        public bool Stream(StreamReader streamReader)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

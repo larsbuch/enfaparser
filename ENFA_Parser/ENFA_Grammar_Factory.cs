@@ -67,9 +67,9 @@ namespace ENFA_Parser
             return new ENFA_PlaceHolder(Controller, groupName);
         }
 
-        public override ENFA_Base CreateState(string stateName, StateType stateType)
+        public override ENFA_Base CreateState(ENFA_Base prevoiusState, string stateName, StateType stateType)
         {
-            return new ENFA_State(Controller, stateName, stateType);
+            return new ENFA_State(Controller, prevoiusState, stateName, stateType);
         }
 
         public ENFA_Grammar_Transition CreateGrammarTransition(GrammarTransitionType transitionType, ENFA_Base nextState)

@@ -25,7 +25,7 @@ namespace ENFA_Parser
 
         public abstract ENFA_Tokenizer GetTokenizer();
 
-        public abstract ENFA_Base CreateState(string stateName, StateType stateType);
+        public abstract ENFA_Base CreateState(ENFA_Base prevoiusState, string stateName, StateType stateType);
 
         public abstract ENFA_PatternEnd CreatePatternEnd(ENFA_PatternStart patternStart, string terminalName);
 
@@ -45,8 +45,14 @@ namespace ENFA_Parser
 
         public abstract ENFA_Base CreatePlaceHolder(string groupName);
 
-        public abstract List<ENFA_Match> CreateMatchList();
+        public List<ENFA_Match> CreateMatchList()
+        {
+            return new List<ENFA_Match>();
+        }
 
-        public abstract List<ENFA_MatchPath> CreateMatchPathList();
+        public List<ENFA_MatchPath> CreateMatchPathList()
+        {
+            return new List<ENFA_MatchPath>();
+        }
     }
 }

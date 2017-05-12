@@ -14,7 +14,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Literal, new ENFA_State(controller, RegexTransitionType.Literal.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Literal, new ENFA_State(controller, null, RegexTransitionType.Literal.ToString(), StateType.Accepting));
             transition.AddLiteral('a');
             transition.AddLiteral('b');
             Assert.True(transition.TransitionAllowed(null,'a', out transitionConsumesCharacter));
@@ -26,7 +26,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Literal, new ENFA_State(controller, RegexTransitionType.Literal.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Literal, new ENFA_State(controller, null, RegexTransitionType.Literal.ToString(), StateType.Accepting));
             transition.AddLiteral('a');
             transition.AddLiteral('b');
             Assert.False(transition.TransitionAllowed(null, 'c', out transitionConsumesCharacter));
@@ -37,7 +37,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateLiteral, new ENFA_State(controller, RegexTransitionType.NegateLiteral.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateLiteral, new ENFA_State(controller, null, RegexTransitionType.NegateLiteral.ToString(), StateType.Accepting));
             transition.AddLiteral('a');
             transition.AddLiteral('b');
             Assert.True(transition.TransitionAllowed(null, 'c', out transitionConsumesCharacter));
@@ -49,7 +49,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateLiteral, new ENFA_State(controller, RegexTransitionType.NegateLiteral.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateLiteral, new ENFA_State(controller, null, RegexTransitionType.NegateLiteral.ToString(), StateType.Accepting));
             transition.AddLiteral('a');
             transition.AddLiteral('b');
             Assert.False(transition.TransitionAllowed(null, 'a', out transitionConsumesCharacter));
@@ -60,7 +60,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Letter, new ENFA_State(controller, RegexTransitionType.Letter.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Letter, new ENFA_State(controller, null, RegexTransitionType.Letter.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed(null, 'c', out transitionConsumesCharacter));
             Assert.True(transitionConsumesCharacter);
         }
@@ -70,7 +70,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Letter, new ENFA_State(controller, RegexTransitionType.Letter.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Letter, new ENFA_State(controller, null, RegexTransitionType.Letter.ToString(), StateType.Accepting));
             Assert.False(transition.TransitionAllowed(null, '9', out transitionConsumesCharacter));
         }
 
@@ -79,7 +79,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateLetter, new ENFA_State(controller, RegexTransitionType.NegateLetter.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateLetter, new ENFA_State(controller, null, RegexTransitionType.NegateLetter.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed(null, '9', out transitionConsumesCharacter));
             Assert.True(transitionConsumesCharacter);
         }
@@ -89,7 +89,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateLetter, new ENFA_State(controller, RegexTransitionType.NegateLetter.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateLetter, new ENFA_State(controller, null, RegexTransitionType.NegateLetter.ToString(), StateType.Accepting));
             Assert.False(transition.TransitionAllowed(null, 'c', out transitionConsumesCharacter));
         }
 
@@ -98,7 +98,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Digit, new ENFA_State(controller, RegexTransitionType.Digit.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Digit, new ENFA_State(controller, null, RegexTransitionType.Digit.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed(null, '9', out transitionConsumesCharacter));
             Assert.True(transitionConsumesCharacter);
         }
@@ -108,7 +108,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Digit, new ENFA_State(controller, RegexTransitionType.Digit.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Digit, new ENFA_State(controller, null, RegexTransitionType.Digit.ToString(), StateType.Accepting));
             Assert.False(transition.TransitionAllowed(null, 'c', out transitionConsumesCharacter));
         }
 
@@ -117,7 +117,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateDigit, new ENFA_State(controller, RegexTransitionType.NegateDigit.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateDigit, new ENFA_State(controller, null, RegexTransitionType.NegateDigit.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed(null, 'c', out transitionConsumesCharacter));
             Assert.True(transitionConsumesCharacter);
         }
@@ -127,7 +127,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateDigit, new ENFA_State(controller, RegexTransitionType.NegateDigit.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateDigit, new ENFA_State(controller, null, RegexTransitionType.NegateDigit.ToString(), StateType.Accepting));
             Assert.False(transition.TransitionAllowed(null, '9', out transitionConsumesCharacter));
         }
 
@@ -136,7 +136,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Whitespace, new ENFA_State(controller, RegexTransitionType.Whitespace.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Whitespace, new ENFA_State(controller, null, RegexTransitionType.Whitespace.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed(null, ' ', out transitionConsumesCharacter));
             Assert.True(transitionConsumesCharacter);
         }
@@ -146,7 +146,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Whitespace, new ENFA_State(controller, RegexTransitionType.Whitespace.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Whitespace, new ENFA_State(controller, null, RegexTransitionType.Whitespace.ToString(), StateType.Accepting));
             Assert.False(transition.TransitionAllowed(null, '9', out transitionConsumesCharacter));
         }
 
@@ -155,7 +155,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateWhitespace, new ENFA_State(controller, RegexTransitionType.NegateWhitespace.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateWhitespace, new ENFA_State(controller, null, RegexTransitionType.NegateWhitespace.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed(null, 'c', out transitionConsumesCharacter));
             Assert.True(transitionConsumesCharacter);
         }
@@ -165,7 +165,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateWhitespace, new ENFA_State(controller, RegexTransitionType.NegateWhitespace.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateWhitespace, new ENFA_State(controller, null, RegexTransitionType.NegateWhitespace.ToString(), StateType.Accepting));
             Assert.False(transition.TransitionAllowed(null, ' ', out transitionConsumesCharacter));
         }
 
@@ -174,7 +174,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Word, new ENFA_State(controller, RegexTransitionType.Word.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Word, new ENFA_State(controller, null, RegexTransitionType.Word.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed(null, '_', out transitionConsumesCharacter));
             Assert.True(transitionConsumesCharacter);
         }
@@ -184,7 +184,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Word, new ENFA_State(controller, RegexTransitionType.Word.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.Word, new ENFA_State(controller, null, RegexTransitionType.Word.ToString(), StateType.Accepting));
             Assert.False(transition.TransitionAllowed(null, ' ', out transitionConsumesCharacter));
         }
 
@@ -193,7 +193,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateWord, new ENFA_State(controller, RegexTransitionType.NegateWord.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateWord, new ENFA_State(controller, null, RegexTransitionType.NegateWord.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed(null, '-', out transitionConsumesCharacter));
             Assert.True(transitionConsumesCharacter);
         }
@@ -203,7 +203,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateWord, new ENFA_State(controller, RegexTransitionType.NegateWord.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateWord, new ENFA_State(controller, null, RegexTransitionType.NegateWord.ToString(), StateType.Accepting));
             Assert.False(transition.TransitionAllowed(null, 'a', out transitionConsumesCharacter));
         }
 
@@ -212,7 +212,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NewLine, new ENFA_State(controller, RegexTransitionType.NewLine.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NewLine, new ENFA_State(controller, null, RegexTransitionType.NewLine.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed(null, '\n', out transitionConsumesCharacter));
             Assert.True(transitionConsumesCharacter);
         }
@@ -222,7 +222,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NewLine, new ENFA_State(controller, RegexTransitionType.NewLine.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NewLine, new ENFA_State(controller, null, RegexTransitionType.NewLine.ToString(), StateType.Accepting));
             Assert.False(transition.TransitionAllowed(null, 'a', out transitionConsumesCharacter));
         }
 
@@ -231,7 +231,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateNewLine, new ENFA_State(controller, RegexTransitionType.NegateNewLine.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateNewLine, new ENFA_State(controller, null, RegexTransitionType.NegateNewLine.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed(null, ' ', out transitionConsumesCharacter));
             Assert.True(transitionConsumesCharacter);
         }
@@ -241,7 +241,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateNewLine, new ENFA_State(controller, RegexTransitionType.NegateNewLine.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateNewLine, new ENFA_State(controller, null, RegexTransitionType.NegateNewLine.ToString(), StateType.Accepting));
             Assert.False(transition.TransitionAllowed(null, '\n', out transitionConsumesCharacter));
         }
 
@@ -250,7 +250,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.WordBoundary, new ENFA_State(controller, RegexTransitionType.WordBoundary.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.WordBoundary, new ENFA_State(controller, null, RegexTransitionType.WordBoundary.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed(null, 'a', out transitionConsumesCharacter));
             Assert.False(transitionConsumesCharacter);
         }
@@ -260,7 +260,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.WordBoundary, new ENFA_State(controller, RegexTransitionType.WordBoundary.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.WordBoundary, new ENFA_State(controller, null, RegexTransitionType.WordBoundary.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed(' ', 'a', out transitionConsumesCharacter));
             Assert.False(transitionConsumesCharacter);
         }
@@ -270,7 +270,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.WordBoundary, new ENFA_State(controller, RegexTransitionType.WordBoundary.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.WordBoundary, new ENFA_State(controller, null, RegexTransitionType.WordBoundary.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed('b', ' ', out transitionConsumesCharacter));
             Assert.False(transitionConsumesCharacter);
         }
@@ -280,7 +280,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.WordBoundary, new ENFA_State(controller, RegexTransitionType.WordBoundary.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.WordBoundary, new ENFA_State(controller, null, RegexTransitionType.WordBoundary.ToString(), StateType.Accepting));
             Assert.False(transition.TransitionAllowed(null, '\n', out transitionConsumesCharacter));
         }
 
@@ -289,7 +289,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateWordBoundary, new ENFA_State(controller, RegexTransitionType.NegateWordBoundary.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateWordBoundary, new ENFA_State(controller, null, RegexTransitionType.NegateWordBoundary.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed('a', 'b', out transitionConsumesCharacter));
             Assert.False(transitionConsumesCharacter);
         }
@@ -299,7 +299,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateWordBoundary, new ENFA_State(controller, RegexTransitionType.NegateWordBoundary.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateWordBoundary, new ENFA_State(controller, null, RegexTransitionType.NegateWordBoundary.ToString(), StateType.Accepting));
             Assert.False(transition.TransitionAllowed(null, 'a', out transitionConsumesCharacter));
         }
 
@@ -308,7 +308,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateWordBoundary, new ENFA_State(controller, RegexTransitionType.NegateWordBoundary.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateWordBoundary, new ENFA_State(controller, null, RegexTransitionType.NegateWordBoundary.ToString(), StateType.Accepting));
             Assert.False(transition.TransitionAllowed('b', ' ', out transitionConsumesCharacter));
         }
 
@@ -317,7 +317,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateWordBoundary, new ENFA_State(controller, RegexTransitionType.NegateWordBoundary.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.NegateWordBoundary, new ENFA_State(controller, null, RegexTransitionType.NegateWordBoundary.ToString(), StateType.Accepting));
             Assert.False(transition.TransitionAllowed(' ', 'a', out transitionConsumesCharacter));
         }
 
@@ -326,7 +326,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.StartOfLine, new ENFA_State(controller, RegexTransitionType.StartOfLine.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.StartOfLine, new ENFA_State(controller, null, RegexTransitionType.StartOfLine.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed(null, ' ', out transitionConsumesCharacter));
             Assert.False(transitionConsumesCharacter);
         }
@@ -336,7 +336,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.StartOfLine, new ENFA_State(controller, RegexTransitionType.StartOfLine.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.StartOfLine, new ENFA_State(controller, null, RegexTransitionType.StartOfLine.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed('\n', ' ', out transitionConsumesCharacter));
             Assert.False(transitionConsumesCharacter);
         }
@@ -346,7 +346,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.StartOfLine, new ENFA_State(controller, RegexTransitionType.StartOfLine.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.StartOfLine, new ENFA_State(controller, null, RegexTransitionType.StartOfLine.ToString(), StateType.Accepting));
             Assert.False(transition.TransitionAllowed('a', 'c', out transitionConsumesCharacter));
         }
 
@@ -355,7 +355,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.EndOfLine, new ENFA_State(controller, RegexTransitionType.EndOfLine.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.EndOfLine, new ENFA_State(controller, null, RegexTransitionType.EndOfLine.ToString(), StateType.Accepting));
             Assert.True(transition.TransitionAllowed('a', '\n', out transitionConsumesCharacter));
             Assert.False(transitionConsumesCharacter);
         }
@@ -365,7 +365,7 @@ namespace ENFA_Parser.UnitTests
         {
             bool transitionConsumesCharacter;
             ENFA_Controller controller = new ENFA_Controller(ParserType.Regex);
-            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.EndOfLine, new ENFA_State(controller, RegexTransitionType.EndOfLine.ToString(), StateType.Accepting));
+            ENFA_Regex_Transition transition = (controller.Factory as ENFA_Regex_Factory).CreateRegexTransition(RegexTransitionType.EndOfLine, new ENFA_State(controller, null, RegexTransitionType.EndOfLine.ToString(), StateType.Accepting));
             Assert.False(transition.TransitionAllowed('\n', 'a', out transitionConsumesCharacter));
         }
 

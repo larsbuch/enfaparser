@@ -33,5 +33,6 @@ namespace ENFA_Parser
         public const string SpecifiedGroupNameDoesNotExist = "Specified Group Name does not exist";
         public const string TryingToCreateNewGrammarTransitionInRegex = "Trying to create new Grammar Transition in regex";
         public const string TryingToCreateNewRegexTransitionInGrammar = "Trying to create new Regex Transition in grammar";
+        public const string PreviousStateIsNull = "Previous state is null";
     }
 }

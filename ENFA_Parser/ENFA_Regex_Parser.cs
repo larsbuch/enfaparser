@@ -19,9 +19,9 @@ namespace ENFA_Parser
             while (currentMatchPaths.Count > 0)
             {
                 matchList.Clear();
-                foreach (ENFA_MatchPath lexerPath in currentMatchPaths)
+                foreach (ENFA_MatchPath matchPath in currentMatchPaths)
                 {
-                    NextTokens(lexerPath, matchList);
+                    throw new NotImplementedException();
                 }
                 yield return matchList;
             }

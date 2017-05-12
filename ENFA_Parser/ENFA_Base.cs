@@ -16,12 +16,16 @@ namespace ENFA_Parser
         private StateType _stateType;
         protected List<ENFA_Transition> _nextTransitions;
         private ENFA_Controller _controller;
+        private int _minRepetitions;
+        private int _maxRepetitions;
 
         public ENFA_Base(ENFA_Controller controller, StateType stateType)
         {
             _controller = controller;
             _stateType = stateType;
             _nextTransitions = new List<ENFA_Transition>();
+            _minRepetitions = 1;
+            _maxRepetitions = 1;
         }
 
         public StateType StateType
@@ -110,12 +114,36 @@ namespace ENFA_Parser
                     return state;
                 }
             }
-            return Controller.Factory.CreateState(stateName, stateType);
+            return Controller.Factory.CreateState(this, stateName, stateType);
         }
 
         internal virtual ENFA_Base NewPlaceHolder(string groupName)
         {
             return Controller.Factory.CreatePlaceHolder(groupName);
+        }
+
+        public int MinRepetitions
+        {
+            get
+            {
+                return _minRepetitions;
+            }
+            set
+            {
+                _minRepetitions = value;
+            }
+        }
+
+        public int MaxRepetitions
+        {
+            get
+            {
+                return _maxRepetitions;
+            }
+            set
+            {
+                _maxRepetitions = value;
+            }
         }
     }
 }
