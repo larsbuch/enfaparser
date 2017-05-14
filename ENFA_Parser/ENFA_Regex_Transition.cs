@@ -33,6 +33,7 @@ namespace ENFA_Parser
             if (!_literal.Contains(literal))
             {
                 _literal.Add(literal);
+                _literal.Sort();
             }
         }
 
@@ -159,6 +160,11 @@ namespace ENFA_Parser
             {
                 return true;
             }
+        }
+
+        public override string ToString()
+        {
+            return TransitionType.ToString();
         }
     }
 }

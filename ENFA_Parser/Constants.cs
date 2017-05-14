@@ -40,6 +40,7 @@ namespace ENFA_Parser
         public const char EqualsSign = (char)0x003D;
         public const char ExclamationMark = (char)0x0021;
         public const char Escape = (char)0x001B;
+        public const char Space = (char)0x0020;
 
         /* Renamed for regex */
         public const char ExitContext = DoubleQuote;
@@ -50,5 +51,11 @@ namespace ENFA_Parser
         public const char GroupingEnd = RightParanthesis;
         public const char GroupingStart = LeftParanthesis;
 
+        /* Hierarchy Printing */
+        public const char BendPipe = '\u2514';
+        public const char TPipe = '\u251C';
+        public const char HorizontalPipe = '\u2500';
+        public const char HorizontalTPipe = '\u252C';
+        public const char VerticalPipe = '\u2502';
     }
 }

@@ -53,5 +53,10 @@ namespace ENFA_Parser
         {
             return _groupNames.Contains(groupName);
         }
+
+        public override string ToString()
+        {
+            return string.Format("Terminal Match [{0}]", TerminalName);
+        }
     }
 }

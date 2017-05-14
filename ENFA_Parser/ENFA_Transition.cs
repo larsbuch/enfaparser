@@ -41,5 +41,10 @@ namespace ENFA_Parser
         {
             return _nextState;
         }
+
+        internal void PrintHierarchy(StringBuilder stringBuilder, string indent, bool isLast)
+        {
+           _nextState.PrintHierarchy(stringBuilder, indent, isLast, ToString());
+        }
     }
 }

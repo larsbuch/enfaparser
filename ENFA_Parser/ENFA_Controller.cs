@@ -119,6 +119,15 @@ namespace ENFA_Parser
             }
         }
 
+        public string PrintHierarchy
+        {
+            get
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                PatternStart.PrintHierarchy(stringBuilder, string.Empty,true, string.Empty);
+                return stringBuilder.ToString();
+            }
+        }
         //private StreamReader _streamReader;
 
         //public void AddStream(Stream stream)

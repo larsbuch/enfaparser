@@ -145,5 +145,44 @@ namespace ENFA_Parser
                 _maxRepetitions = value;
             }
         }
+
+        internal void PrintHierarchy(StringBuilder stringBuilder, string indent, bool isLast, string transitionName)
+        {
+            int maxCounter = GetTransitions.Count - 1;
+            stringBuilder.AppendLine(string.Format("{0}{1}{2}{3}{4}"
+                    , indent + (isLast ? Constants.BendPipe: Constants.TPipe)
+                    , maxCounter == 0?Constants.HorizontalTPipe:Constants.HorizontalPipe
+                    , transitionName
+                    , Constants.HorizontalPipe
+                    , ToString()));
+
+            ENFA_Transition transition;
+            indent += isLast ? Constants.Space : Constants.VerticalPipe;
+            for(int counter = 0; counter <= maxCounter; counter += 1)
+            {
+                transition = GetTransitions[counter];
+                if(counter == maxCounter)
+                {
+                    transition.PrintHierarchy(stringBuilder, indent,true);
+                }
+                else
+                {
+                    transition.PrintHierarchy(stringBuilder, indent, false);
+                }
+            }
+        }
+
+        public override string ToString()
+        {
+            string repetitions = String.Empty;
+            if (MinRepetitions != 1 || MaxRepetitions != 1)
+            {
+                repetitions = "{" + MinRepetitions.ToString() + "," + MaxRepetitions.ToString() + "}";
+            }
+            return string.Format("{0}{1}{2}"
+                    , StateName
+                    , StateType == StateType.NotApplicable?string.Empty:"(" + StateType.ToString() + ")"
+                    , repetitions);
+        }
     }
 }
