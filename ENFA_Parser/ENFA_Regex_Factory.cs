@@ -76,5 +76,20 @@ namespace ENFA_Parser
         {
             return new ENFA_Regex_Transition(transitionType, nextState);
         }
+
+        internal ENFA_Regex_MatchPath CreateRootMatchPath()
+        {
+            return new ENFA_Regex_MatchPath();
+        }
+        public LinkedList<ENFA_Regex_MatchPath> CreateMatchPathList()
+        {
+            LinkedList<ENFA_Regex_MatchPath> list = new LinkedList<ENFA_Regex_MatchPath>(CreateRootMatchPathEnumerator());
+            return list;
+        }
+
+        private IEnumerable<ENFA_Regex_MatchPath> CreateRootMatchPathEnumerator()
+        {
+            yield return CreateRootMatchPath();
+        }
     }
 }

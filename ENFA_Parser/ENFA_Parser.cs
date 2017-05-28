@@ -37,9 +37,6 @@ namespace ENFA_Parser
             }
         }
 
-        public bool Stream(StreamReader streamReader)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract bool Parse(StreamReader streamReader);
     }
 }

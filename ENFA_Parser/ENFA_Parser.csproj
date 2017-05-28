@@ -81,6 +81,7 @@
     <Compile Include="ENFA_Transition.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="ErrorText.cs" />
+    <Compile Include="ENFA_MatchPathTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -49,10 +49,5 @@ namespace ENFA_Parser
         {
             return new List<ENFA_Match>();
         }
-
-        public List<ENFA_MatchPath> CreateMatchPathList()
-        {
-            return new List<ENFA_MatchPath>();
-        }
     }
 }

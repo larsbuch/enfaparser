@@ -11,5 +11,10 @@ namespace ENFA_Parser
     {
         public ENFA_Grammar_Parser(ENFA_Controller controller) : base(controller)
         { }
+
+        public override bool Parse(StreamReader streamReader)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

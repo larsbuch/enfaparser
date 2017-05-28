@@ -17,10 +17,10 @@ namespace ENFA_Console
             if (regex.Tokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())))
             {
                 Console.WriteLine(regex.PrintHierarchy);
-                Assert.True(regex.Parser.Stream(new StreamReader("ab".ToStream())));
-                Assert.False(regex.Parser.Stream(new StreamReader("a".ToStream())));
-                Assert.False(regex.Parser.Stream(new StreamReader("b".ToStream())));
-                Assert.False(regex.Parser.Stream(new StreamReader("ba".ToStream())));
+                Assert.True(regex.Parser.Parse(new StreamReader("ab".ToStream())));
+                Assert.False(regex.Parser.Parse(new StreamReader("a".ToStream())));
+                Assert.False(regex.Parser.Parse(new StreamReader("b".ToStream())));
+                Assert.False(regex.Parser.Parse(new StreamReader("ba".ToStream())));
             }
         }
 
@@ -31,10 +31,10 @@ namespace ENFA_Console
             if (regex.Tokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())))
             {
                 Console.WriteLine(regex.PrintHierarchy);
-                Assert.True(regex.Parser.Stream(new StreamReader("a".ToStream())));
-                Assert.True(regex.Parser.Stream(new StreamReader("b".ToStream())));
-                Assert.False(regex.Parser.Stream(new StreamReader("ab".ToStream())));
-                Assert.False(regex.Parser.Stream(new StreamReader("c".ToStream())));
+                Assert.True(regex.Parser.Parse(new StreamReader("a".ToStream())));
+                Assert.True(regex.Parser.Parse(new StreamReader("b".ToStream())));
+                Assert.False(regex.Parser.Parse(new StreamReader("ab".ToStream())));
+                Assert.False(regex.Parser.Parse(new StreamReader("c".ToStream())));
             }
         }
 
