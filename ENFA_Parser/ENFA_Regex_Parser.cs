@@ -27,38 +27,55 @@ namespace ENFA_Parser
         //    }
         //}
 
-        public override bool Parse(StreamReader streamReader)
+        //public override bool Parse(StreamReader streamReader)
+        //{
+        //    bool exit = false;
+        //    bool success = false;
+        //    char? nextChar = NextCharInStream(streamReader);
+        //    char? lastChar = null;
+        //    LinkedList<ENFA_Regex_MatchPath> currentMatchPaths = (Controller.Factory as ENFA_Regex_Factory).CreateMatchPathList();
+        //    while (nextChar.HasValue && !exit)
+        //    {
+        //        foreach (ENFA_Regex_MatchPath matchPath in currentMatchPaths)
+        //        {
+        //            matchPath.Transition(lastChar, nextChar);
+        //        }
+        //        lastChar = nextChar;
+        //        nextChar = NextCharInStream(streamReader);
+        //    }
+        //    return success;
+        //}
+
+        public override IEnumerable<List<ENFA_PatternMatch>> Parse(StreamReader streamReader)
         {
             bool exit = false;
-            bool success = false;
             char? nextChar = NextCharInStream(streamReader);
+            char? lastChar = null;
             LinkedList<ENFA_Regex_MatchPath> currentMatchPaths = (Controller.Factory as ENFA_Regex_Factory).CreateMatchPathList();
-            while (nextChar.HasValue && !exit)
+            List<ENFA_PatternMatch> patternMatches = (Controller.Factory as ENFA_Regex_Factory).CreatePatternMatchList();
+            while (!exit)
             {
-                foreach(ENFA_Regex_MatchPath matchPath in currentMatchPaths)
+                if (!nextChar.HasValue)
                 {
-                    List<ENFA_Regex_Match> validPaths = matchPath.ValidPaths(nextChar);
-                    if (validPaths.Count == 0)
+                    exit = true;
+                }
+                foreach (ENFA_Regex_MatchPath matchPath in currentMatchPaths)
+                {
+                    matchPath.Transition(lastChar, nextChar);
+                    if (matchPath.IsPatternMatch)
                     {
-                        // Kill MatchPath
-                        matchPath.Kill();
-                        currentMatchPaths.Remove(matchPath);
-                    }
-                    else
-                    {
-                        // Split matchPath
-                        for (int counter = 0; counter < validPaths.Count -1; counter += 1)
-                        {
-                            ENFA_Regex_MatchPath clone = matchPath.Clone();
-                            clone.Transition(validPaths[counter]);
-                            currentMatchPaths.AddBefore(matchPath.Node, clone.Node);
-                        }
-                        matchPath.Transition(validPaths[validPaths.Count - 1]);
+                        patternMatches.Add(new ENFA_PatternMatch(matchPath.PatternMatched, matchPath.LiteralMatched));
                     }
                 }
+                if (patternMatches.Count > 0)
+                {
+                    yield return patternMatches;
+                    patternMatches = (Controller.Factory as ENFA_Regex_Factory).CreatePatternMatchList();
+                }
+
+                lastChar = nextChar;
                 nextChar = NextCharInStream(streamReader);
             }
-            return success;
         }
 
         private char? PeekNextChar(StreamReader reader)

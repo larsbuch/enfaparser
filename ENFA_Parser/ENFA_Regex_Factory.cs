@@ -62,6 +62,11 @@ namespace ENFA_Parser
             return new ENFA_PatternEnd(patternStart, Controller, terminalName);
         }
 
+        internal List<ENFA_PatternMatch> CreatePatternMatchList()
+        {
+            return new List<ENFA_PatternMatch>();
+        }
+
         public override ENFA_Base CreatePlaceHolder(string groupName)
         {
             return new ENFA_PlaceHolder(Controller, groupName);
@@ -79,7 +84,7 @@ namespace ENFA_Parser
 
         internal ENFA_Regex_MatchPath CreateRootMatchPath()
         {
-            return new ENFA_Regex_MatchPath();
+            return new ENFA_Regex_MatchPath(Controller);
         }
         public LinkedList<ENFA_Regex_MatchPath> CreateMatchPathList()
         {

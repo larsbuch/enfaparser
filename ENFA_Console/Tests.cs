@@ -17,10 +17,10 @@ namespace ENFA_Console
             if (regex.Tokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())))
             {
                 Console.WriteLine(regex.PrintHierarchy);
-                Assert.True(regex.Parser.Parse(new StreamReader("ab".ToStream())));
-                Assert.False(regex.Parser.Parse(new StreamReader("a".ToStream())));
-                Assert.False(regex.Parser.Parse(new StreamReader("b".ToStream())));
-                Assert.False(regex.Parser.Parse(new StreamReader("ba".ToStream())));
+                Assert.True(regex.Parser.Parse(new StreamReader("ab".ToStream())).ToList().Count > 0);
+                Assert.False(regex.Parser.Parse(new StreamReader("a".ToStream())).ToList().Count > 0);
+                Assert.False(regex.Parser.Parse(new StreamReader("b".ToStream())).ToList().Count > 0);
+                Assert.False(regex.Parser.Parse(new StreamReader("ba".ToStream())).ToList().Count > 0);
             }
         }
 
@@ -31,12 +31,22 @@ namespace ENFA_Console
             if (regex.Tokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())))
             {
                 Console.WriteLine(regex.PrintHierarchy);
-                Assert.True(regex.Parser.Parse(new StreamReader("a".ToStream())));
-                Assert.True(regex.Parser.Parse(new StreamReader("b".ToStream())));
-                Assert.False(regex.Parser.Parse(new StreamReader("ab".ToStream())));
-                Assert.False(regex.Parser.Parse(new StreamReader("c".ToStream())));
+                Assert.True(regex.Parser.Parse(new StreamReader("a".ToStream())).ToList().Count > 0);
+                Assert.True(regex.Parser.Parse(new StreamReader("b".ToStream())).ToList().Count > 0);
+                Assert.False(regex.Parser.Parse(new StreamReader("ab".ToStream())).ToList().Count > 0);
+                Assert.False(regex.Parser.Parse(new StreamReader("c".ToStream())).ToList().Count > 0);
             }
         }
+
+        public void SingleLetter_Accept()
+        {
+            ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
+            string regexPattern = @"a" + Constants.ExitContext;
+            regex.Tokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream()));
+            string regexString = @"a";
+            Assert.True(regex.Parser.Parse(new StreamReader(regexString.ToStream())).ToList().Count > 0);
+        }
+
 
         private class Assert
         {

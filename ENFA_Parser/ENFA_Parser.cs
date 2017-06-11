@@ -37,6 +37,6 @@ namespace ENFA_Parser
             }
         }
 
-        public abstract bool Parse(StreamReader streamReader);
+        public abstract IEnumerable<List<ENFA_PatternMatch>> Parse(StreamReader streamReader);
     }
 }

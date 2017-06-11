@@ -37,45 +37,43 @@ namespace ENFA_Parser
             }
         }
 
-        public bool TransitionAllowed(char? lastChar, char nextChar, out bool consumesChar)
+        public bool TransitionAllowed(char? lastChar, char? nextChar, out bool consumesChar)
         {
-            switch(_transitionType)
+            /* Do not consume char if next state is PatternEnd */
+            consumesChar = (!(NextState is ENFA_PatternEnd));
+            switch (_transitionType)
             {
+                case RegexTransitionType.GroupingStart:
+                    consumesChar = false;
+                    return true;
+                case RegexTransitionType.GroupingEnd:
+                    consumesChar = (!(NextState is ENFA_PatternEnd));
+                    return true;
+                case RegexTransitionType.BackReference:
+                    throw new NotImplementedException();
                 case RegexTransitionType.Literal:
-                    consumesChar = true;
-                    return _literal.Contains(nextChar);
+                    return nextChar.HasValue && _literal.Contains(nextChar.Value);
                 case RegexTransitionType.NegateLiteral:
-                    consumesChar = true;
-                    return ! _literal.Contains(nextChar);
+                    return nextChar.HasValue && !_literal.Contains(nextChar.Value);
                 case RegexTransitionType.Letter:
-                    consumesChar = true;
-                    return Char.IsLetter(nextChar);
+                    return nextChar.HasValue && Char.IsLetter(nextChar.Value);
                 case RegexTransitionType.NegateLetter:
-                    consumesChar = true;
-                    return !Char.IsLetter(nextChar);
+                    return nextChar.HasValue && !Char.IsLetter(nextChar.Value);
                 case RegexTransitionType.Digit:
-                    consumesChar = true;
-                    return Char.IsDigit(nextChar);
+                    return nextChar.HasValue && Char.IsDigit(nextChar.Value);
                 case RegexTransitionType.NegateDigit:
-                    consumesChar = true;
-                    return !Char.IsDigit(nextChar);
+                    return nextChar.HasValue && !Char.IsDigit(nextChar.Value);
                 case RegexTransitionType.NewLine:
-                    consumesChar = true;
                     return nextChar == Constants.NewLine;
                 case RegexTransitionType.NegateNewLine:
-                    consumesChar = true;
                     return nextChar != Constants.NewLine;
                 case RegexTransitionType.Whitespace:
-                    consumesChar = true;
-                    return Char.IsWhiteSpace(nextChar);
+                    return nextChar.HasValue && Char.IsWhiteSpace(nextChar.Value);
                 case RegexTransitionType.NegateWhitespace:
-                    consumesChar = true;
-                    return !Char.IsWhiteSpace(nextChar);
+                    return nextChar.HasValue && !Char.IsWhiteSpace(nextChar.Value);
                 case RegexTransitionType.Word:
-                    consumesChar = true;
                     return WordChar(nextChar);
                 case RegexTransitionType.NegateWord:
-                    consumesChar = true;
                     return !WordChar(nextChar);
                 case RegexTransitionType.WordBoundary:
                     consumesChar = false;
@@ -104,7 +102,6 @@ namespace ENFA_Parser
                         return false;
                     }
                 case RegexTransitionType.ExitContext:
-                    consumesChar = true;
                     return true;
                 default:
                     throw new ENFA_Exception("Transition Type has not been defined");
@@ -138,19 +135,7 @@ namespace ENFA_Parser
             }
         }
 
-        private bool WordChar(char testChar)
-        {
-                if (Char.IsLetterOrDigit(testChar) || testChar == Constants.Underscore)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-        }
-
-        private bool WordBoundary(char? lastChar, char nextChar)
+        private bool WordBoundary(char? lastChar, char? nextChar)
         {
             if((WordChar(lastChar) && WordChar(nextChar)) || (!WordChar(lastChar) && !WordChar(nextChar)))
             {

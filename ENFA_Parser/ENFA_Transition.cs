@@ -26,6 +26,14 @@ namespace ENFA_Parser
             _matchingType = MatchingType.NotSet;
         }
 
+        public ENFA_Base NextState
+        {
+            get
+            {
+                return _nextState;
+            }
+        }
+
         public MatchingType MatchingType
         {
             get

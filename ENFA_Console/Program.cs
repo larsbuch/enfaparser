@@ -14,7 +14,7 @@ namespace ENFA_Console
             Tests tests = new Tests();
             try
             {
-                tests.SimpleConcatination();
+                tests.SingleLetter_Accept();
             }
             catch(Exception ex)
             {

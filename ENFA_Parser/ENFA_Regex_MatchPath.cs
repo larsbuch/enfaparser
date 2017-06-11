@@ -9,10 +9,27 @@ namespace ENFA_Parser
     public class ENFA_Regex_MatchPath : ENFA_MatchPath
     {
         private LinkedListNode<ENFA_Regex_MatchPath> _node;
+        private ENFA_Controller _controller;
+        private ENFA_Base _patternLocation;
+        //        private ENFA_Regex_MatchTree _matchTree;
+        private List<char> _patternMatched = new List<char>();
 
-        public ENFA_Regex_MatchPath()
+        public ENFA_Regex_MatchPath(ENFA_Controller controller)
         {
+            if(controller.ParserType == ParserType.Grammar)
+            {
+                throw new ENFA_RegexRuntime_Exception(ErrorText.ControllerGrammarTypeInRegex);
+            }
+            _controller = controller;
+            _patternLocation = _controller.PatternStart;
             _node = new LinkedListNode<ENFA_Regex_MatchPath>(this);
+        }
+
+        public ENFA_Regex_MatchPath(ENFA_Regex_MatchPath cloneThis)
+        {
+            _controller = cloneThis.Controller;
+            _node = cloneThis.Node;
+            _patternLocation = cloneThis.PatternLocation;
         }
 
         public LinkedListNode<ENFA_Regex_MatchPath> Node
@@ -23,24 +40,112 @@ namespace ENFA_Parser
             }
         }
 
-        internal void Kill()
+        internal ENFA_Controller Controller
         {
-            throw new NotImplementedException();
+            get
+            {
+                return _controller;
+            }
         }
 
-        internal ENFA_Regex_MatchPath Clone()
+        private ENFA_Base PatternLocation
         {
-            throw new NotImplementedException();
+            get
+            {
+                return _patternLocation;
+            }
+            set
+            {
+                _patternLocation = value;
+            }
         }
 
-        internal void Transition(ENFA_Regex_Match match)
+        public bool IsPatternMatch
         {
-            throw new NotImplementedException();
+            get
+            {
+                return PatternLocation.StateType == StateType.Accepting;
+            }
         }
 
-        internal List<ENFA_Regex_Match> ValidPaths(char? nextChar)
+        public string PatternMatched
         {
-            throw new NotImplementedException();
+            get
+            {
+                return (PatternLocation as ENFA_PatternEnd).TerminalName;
+            }
+        }
+
+        public string LiteralMatched
+        {
+            get
+            {
+                // TODO use structure
+                StringBuilder builder = new StringBuilder();
+                builder.Append(_patternMatched);
+                return builder.ToString();
+            }
+        }
+
+        private void Kill()
+        {
+            Node.List.Remove(this);
+            // TODO remove matches from matchTree until split
+            _controller = null;
+            _node = null;
+            _patternLocation = null;
+        }
+
+        private ENFA_Regex_MatchPath Clone()
+        {
+            return new ENFA_Regex_MatchPath(this);
+        }
+
+        internal void Transition(char? lastChar, char? nextChar)
+        {
+            List<ENFA_Regex_Match> validPaths = ValidPaths(lastChar, nextChar);
+            if (validPaths.Count == 0)
+            {
+                // Kill MatchPath
+                Kill();
+            }
+            else
+            {
+                // Split matchPath
+                for (int counter = 0; counter < validPaths.Count - 1; counter += 1)
+                {
+                    ENFA_Regex_MatchPath clone = Clone();
+                    Node.List.AddBefore(Node, clone.Node);
+                    if(!clone.Transition(validPaths[counter]))
+                    {
+                        clone.Transition(lastChar, nextChar);
+                    }
+                }
+                if(!Transition(validPaths[validPaths.Count - 1]))
+                {
+                    Transition(lastChar, nextChar);
+                }
+            }
+        }
+
+        private bool Transition(ENFA_Regex_Match match)
+        {
+            PatternLocation = match.Transition.Transition();
+            return match.ConsumesChar;
+        }
+
+        private List<ENFA_Regex_Match> ValidPaths(char? lastChar, char? nextChar)
+        {
+            List<ENFA_Regex_Match> returnList = new List<ENFA_Regex_Match>();
+            bool consumesChar;
+            foreach (ENFA_Regex_Transition transition in PatternLocation.GetTransitions)
+            {
+                if (transition.TransitionAllowed(lastChar, nextChar, out consumesChar))
+                {
+                    returnList.Add(new ENFA_Regex_Match(transition, consumesChar));
+                }
+            }
+            return returnList;
         }
     }
 }
