@@ -87,13 +87,37 @@ namespace ENFA_Parser
             }
         }
 
+        public bool IsPatternEnd
+        {
+            get
+            {
+                switch (PatternLocation.StateType)
+                {
+                    case StateType.Accepting:
+                        return true;
+                    case StateType.Negating:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        }
+
         private void Kill()
         {
-            Node.List.Remove(this);
-            // TODO remove matches from matchTree until split
-            _controller = null;
-            _node = null;
-            _patternLocation = null;
+            if (Node.List.Count > 1)
+            {
+                Node.List.Remove(this);
+
+                // TODO remove matches from matchTree until split
+                _controller = null;
+                _node = null;
+                _patternLocation = null;
+            }
+            else
+            {
+                // TODO Insert Error token for one char and go back
+            }
         }
 
         private ENFA_Regex_MatchPath Clone()
@@ -116,14 +140,21 @@ namespace ENFA_Parser
                 {
                     ENFA_Regex_MatchPath clone = Clone();
                     Node.List.AddBefore(Node, clone.Node);
-                    if(!clone.Transition(validPaths[counter]))
+                    if (!clone.Transition(validPaths[counter]))
                     {
-                        clone.Transition(lastChar, nextChar);
+                        if (!clone.IsPatternEnd)
+                        {
+                            clone.Transition(lastChar, nextChar);
+                        }
                     }
                 }
-                if(!Transition(validPaths[validPaths.Count - 1]))
+                /* Transition once again if transition consumes no character */
+                if (!Transition(validPaths[validPaths.Count - 1]))
                 {
-                    Transition(lastChar, nextChar);
+                    if (!IsPatternEnd)
+                    {
+                        Transition(lastChar, nextChar);
+                    }
                 }
             }
         }
@@ -146,6 +177,11 @@ namespace ENFA_Parser
                 }
             }
             return returnList;
+        }
+
+        public override string ToString()
+        {
+            return PatternLocation.StateName;
         }
     }
 }

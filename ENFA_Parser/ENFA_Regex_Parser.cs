@@ -66,15 +66,18 @@ namespace ENFA_Parser
                     {
                         patternMatches.Add(new ENFA_PatternMatch(matchPath.PatternMatched, matchPath.LiteralMatched));
                     }
+                    Console.WriteLine(matchPath.Node.Value);
                 }
                 if (patternMatches.Count > 0)
                 {
                     yield return patternMatches;
                     patternMatches = (Controller.Factory as ENFA_Regex_Factory).CreatePatternMatchList();
                 }
-
-                lastChar = nextChar;
-                nextChar = NextCharInStream(streamReader);
+                if (!exit)
+                {
+                    lastChar = nextChar;
+                    nextChar = NextCharInStream(streamReader);
+                }
             }
         }
 

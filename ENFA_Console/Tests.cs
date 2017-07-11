@@ -44,6 +44,7 @@ namespace ENFA_Console
             string regexPattern = @"a" + Constants.ExitContext;
             regex.Tokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream()));
             string regexString = @"a";
+            Console.WriteLine(regex.PrintHierarchy);
             Assert.True(regex.Parser.Parse(new StreamReader(regexString.ToStream())).ToList().Count > 0);
         }
 

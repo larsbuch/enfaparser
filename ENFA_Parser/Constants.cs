@@ -57,5 +57,8 @@ namespace ENFA_Parser
         public const char HorizontalPipe = '\u2500';
         public const char HorizontalTPipe = '\u252C';
         public const char VerticalPipe = '\u2502';
+
+        /* Special Patterns */
+        public const string ENFA_PatternEnd = "ENFA_PatternEnd";
     }
 }

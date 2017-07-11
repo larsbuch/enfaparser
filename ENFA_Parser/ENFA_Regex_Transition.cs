@@ -149,7 +149,14 @@ namespace ENFA_Parser
 
         public override string ToString()
         {
-            return TransitionType.ToString();
+            if (NextState is ENFA_PatternEnd)
+            {
+                return NextState.StateName;
+            }
+            else
+            {
+                return TransitionType.ToString();
+            }
         }
     }
 }

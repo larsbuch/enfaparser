@@ -15,6 +15,11 @@ namespace ENFA_Parser
         NotApplicable
     }
 
+    public enum StateName
+    {
+        ENFA_PatternEnd
+    }
+
     public enum ParserType
     {
         Regex,
