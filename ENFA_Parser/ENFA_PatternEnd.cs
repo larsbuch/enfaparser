@@ -13,7 +13,7 @@ namespace ENFA_Parser
         private List<string> _groupNames = new List<string>();
 
         //A state can be a pattern end
-        public ENFA_PatternEnd(ENFA_PatternStart patternStart, ENFA_Controller controller, string terminalName) :base(controller, true, terminalName, null)
+        public ENFA_PatternEnd(ENFA_PatternStart patternStart, ENFA_Controller controller, string terminalName, StateType stateType) :base(controller, true, terminalName, null, stateType)
         {
             _patternStart = patternStart;
             _terminalName = terminalName;

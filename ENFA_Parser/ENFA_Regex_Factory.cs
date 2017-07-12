@@ -57,9 +57,9 @@ namespace ENFA_Parser
             return new ENFA_LookbehindStart(Controller, positive, parentStart);
         }
 
-        public override ENFA_PatternEnd CreatePatternEnd(ENFA_PatternStart patternStart, string terminalName)
+        public override ENFA_PatternEnd CreatePatternEnd(ENFA_PatternStart patternStart, string terminalName, StateType stateType)
         {
-            return new ENFA_PatternEnd(patternStart, Controller, terminalName);
+            return new ENFA_PatternEnd(patternStart, Controller, terminalName, stateType);
         }
 
         internal List<ENFA_PatternMatch> CreatePatternMatchList()

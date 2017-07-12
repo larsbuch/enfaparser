@@ -27,7 +27,7 @@ namespace ENFA_Parser
 
         public abstract ENFA_Base CreateState(ENFA_Base prevoiusState, string stateName, StateType stateType);
 
-        public abstract ENFA_PatternEnd CreatePatternEnd(ENFA_PatternStart patternStart, string terminalName);
+        public abstract ENFA_PatternEnd CreatePatternEnd(ENFA_PatternStart patternStart, string terminalName, StateType stateType);
 
         public abstract ENFA_GroupingStart CreateGroupStart(ENFA_GroupingStart parentStart);
 

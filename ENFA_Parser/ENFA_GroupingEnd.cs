@@ -12,7 +12,10 @@ namespace ENFA_Parser
         private bool _recording;
         private string _groupName;
 
-        public ENFA_GroupingEnd(ENFA_Controller controller, bool recording, string groupName, ENFA_GroupingEnd parent):base(controller, StateType.NotApplicable)
+        public ENFA_GroupingEnd(ENFA_Controller controller, bool recording, string groupName, ENFA_GroupingEnd parent) : this(controller, recording, groupName, parent, StateType.NotApplicable)
+        { }
+
+        public ENFA_GroupingEnd(ENFA_Controller controller, bool recording, string groupName, ENFA_GroupingEnd parent, StateType stateType):base(controller, stateType)
         {
             _parent = parent;
             _recording = recording;

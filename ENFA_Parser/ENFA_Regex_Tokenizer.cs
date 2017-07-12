@@ -24,7 +24,7 @@ namespace ENFA_Parser
             bool success = false; // Error until proven correct
             bool exit = false;
             ENFA_GroupingStart _parentStart = Controller.PatternStart;
-            ENFA_PatternEnd _patternEnd = Controller.Factory.CreatePatternEnd(_parentStart as ENFA_PatternStart, terminalName);
+            ENFA_PatternEnd _patternEnd = Controller.Factory.CreatePatternEnd(_parentStart as ENFA_PatternStart, terminalName, StateType.Accepting);
             ENFA_GroupingEnd _parentEnd = _patternEnd;
             ENFA_Base lastState = _parentStart;
             ENFA_Base nextState;

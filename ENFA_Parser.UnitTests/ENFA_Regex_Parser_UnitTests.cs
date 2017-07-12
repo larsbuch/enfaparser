@@ -15,9 +15,11 @@ namespace ENFA_Parser.UnitTests
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
             string regexPattern = @"a" + Constants.ExitContext;
-            regex.Tokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream()));
-            string regexString = @"a";
-            Assert.True(regex.Parser.Parse(new StreamReader(regexString.ToStream())).ToList().Count > 0);
+            if (regex.Tokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())))
+            {
+                Assert.True(regex.Parser.Parse(new StreamReader("a".ToStream())).ToList().Count > 0);
+                Assert.True(regex.Parser.Parse(new StreamReader("ab".ToStream())).ToList().Count > 0);
+            }
         }
 
         [Theory, ENFAParserTestConvensions]
@@ -25,9 +27,11 @@ namespace ENFA_Parser.UnitTests
         {
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
             string regexPattern = @"a" + Constants.ExitContext;
-            regex.Tokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream()));
-            string regexString = @"b";
-            Assert.False(regex.Parser.Parse(new StreamReader(regexString.ToStream())).ToList().Count > 0);
+            if (regex.Tokenizer.Tokenize("UnitTest", new StreamReader(regexPattern.ToStream())))
+            {
+                Assert.True(regex.Parser.Parse(new StreamReader("b".ToStream())).ToList().Count > 0);
+                Assert.True(regex.Parser.Parse(new StreamReader("bc".ToStream())).ToList().Count > 0);
+            }
         }
 
         [Theory, ENFAParserTestConvensions]
@@ -36,7 +40,7 @@ namespace ENFA_Parser.UnitTests
             ENFA_Controller regex = new ENFA_Controller(ParserType.Regex);
             string regexString = "Literal" + Constants.ExitContext;
             regex.Tokenizer.Tokenize(regexString, new StreamReader(regexString.ToStream()));
-            Assert.False(regex.Parser.Parse(new StreamReader(regexString.ToStream())).ToList().Count > 0);
+            Assert.True(regex.Parser.Parse(new StreamReader("Literal".ToStream())).ToList().Count > 0);
         }
 
         [Theory, ENFAParserTestConvensions]

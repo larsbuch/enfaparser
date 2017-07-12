@@ -91,15 +91,7 @@ namespace ENFA_Parser
         {
             get
             {
-                switch (PatternLocation.StateType)
-                {
-                    case StateType.Accepting:
-                        return true;
-                    case StateType.Negating:
-                        return true;
-                    default:
-                        return false;
-                }
+                return PatternLocation.StateName.Equals(Constants.ENFA_PatternEnd);
             }
         }
 

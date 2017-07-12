@@ -47,7 +47,6 @@ namespace ENFA_Parser
                     consumesChar = false;
                     return true;
                 case RegexTransitionType.GroupingEnd:
-                    consumesChar = (!(NextState is ENFA_PatternEnd));
                     return true;
                 case RegexTransitionType.BackReference:
                     throw new NotImplementedException();
